@@ -16,17 +16,8 @@ import java.net.URL;
 public class TBleu extends Ennemis {
 
     public TBleu() {
-        super(2, 1, "/images/bleufront", "/images/bleuback");
-    }
-
-    @Override
-    URL getImageFace() throws MalformedURLException {
-        return new URL(imageFace);
-    }
-
-    @Override
-    URL getImageDos() throws MalformedURLException {
-        return new URL(imageDos);
+        super(2, 1, 2, "images/bleufront.gif", "images/bleuback.gif",
+                "images/bleufront.gif", "images/bleuback.gif");
     }
 
     @Override

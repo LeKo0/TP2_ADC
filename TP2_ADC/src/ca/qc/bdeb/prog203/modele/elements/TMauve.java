@@ -16,21 +16,10 @@ import java.net.URL;
 public class TMauve extends Ennemis {
 
     public TMauve() {
-        super(1, 2, "/images/purplefront", "/images/purpleback");
+        super(1, 2, 3, "images/purplefront.gif", "images/purpleback.gif",
+                "images/purplefront.gif", "images/purpleback.gif");
     }
 
-
-
-    @Override
-    URL getImageFace() throws MalformedURLException {
-        return new URL(imageFace);
-
-    }
-
-    @Override
-    URL getImageDos() throws MalformedURLException {
-        return new URL(imageDos);
-    }
     @Override
     void setPointsDeVie(int pointsDeVie) {
         this.pointsDeVie = pointsDeVie;

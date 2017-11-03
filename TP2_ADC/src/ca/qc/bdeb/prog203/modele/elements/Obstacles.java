@@ -12,13 +12,11 @@ import java.net.URL;
  * @author Leo
  */
 public abstract class Obstacles {
-    
+
     protected String image;
 
     public Obstacles(String image) {
         this.image = image;
     }
-    
-    
-    
+
 }

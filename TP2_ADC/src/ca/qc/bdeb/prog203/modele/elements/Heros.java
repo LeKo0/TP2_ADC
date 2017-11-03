@@ -15,17 +15,7 @@ import java.net.URL;
 public class Heros extends Personnages {
 
     public Heros() {
-        super("String de face", "String de dos", 3);
-    }
-
-    @Override
-    URL getImageFace() throws MalformedURLException {
-        return new URL(imageFace);
-    }
-
-    @Override
-    URL getImageDos() throws MalformedURLException {
-        return new URL(imageDos);
+        super("images/herofront.gif", "images/heroback.gif", "images/herodroite.gif", "images/herogauche.gif", 3);
     }
 
     @Override

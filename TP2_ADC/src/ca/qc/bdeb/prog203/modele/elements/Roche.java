@@ -9,10 +9,10 @@ package ca.qc.bdeb.prog203.modele.elements;
  *
  * @author Leo
  */
-public class Roche extends Obstacles{
+public class Roche extends Obstacles {
 
     public Roche() {
-        super("Path de l'image");
+        super("images/roche1.gif");
     }
-    
+
 }

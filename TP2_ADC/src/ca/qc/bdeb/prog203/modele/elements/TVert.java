@@ -16,24 +16,13 @@ import java.net.URL;
 public class TVert extends Ennemis {
 
     public TVert() {
-        super(1, 1, "/images/greenfront", "/images/greenback");
+        super(1, 1, 1, "images/greenfront.gif", "images/greenback.gif",
+                "images/greenfront.gif", "images/greenback.gif");
     }
 
     @Override
     void setPointsDeVie(int pointsDeVie) {
         this.pointsDeVie = pointsDeVie;
-    }
-
-    @Override
-    URL getImageFace() throws MalformedURLException {
-
-        return new URL(imageFace);
-
-    }
-
-    @Override
-    URL getImageDos() throws MalformedURLException {
-        return new URL(imageDos);
     }
 
 }

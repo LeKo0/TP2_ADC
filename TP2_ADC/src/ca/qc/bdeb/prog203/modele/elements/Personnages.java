@@ -14,19 +14,18 @@ import java.net.URL;
  */
 public abstract class Personnages {
 
-    protected String imageFace, imageDos;
+    protected String imageFace, imageDos, imageDroite, imageGauche;
     protected int pointsDeVie;
 
-    public Personnages(String imageFace, String imageDos, int pointsDeVie) {
+    public Personnages(String imageFace, String imageDos, String imageDroite,
+            String imageGauche, int pointsDeVie) {
         this.imageFace = imageFace;
         this.imageDos = imageDos;
+        this.imageDroite = imageDroite;
+        this.imageGauche = imageGauche;
         this.pointsDeVie = pointsDeVie;
     }
 
     abstract void setPointsDeVie(int pointsDeVie);
-
-    abstract URL getImageFace() throws MalformedURLException;
-
-    abstract URL getImageDos() throws MalformedURLException;
 
 }

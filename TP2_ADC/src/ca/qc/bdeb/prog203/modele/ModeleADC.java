@@ -11,11 +11,10 @@ import java.util.Observable;
  *
  * @author 1666876
  */
-public class ModeleADC extends Observable{
+public class ModeleADC extends Observable {
 
-    
     public ModeleADC() {
-        
+
     }
-    
+
 }

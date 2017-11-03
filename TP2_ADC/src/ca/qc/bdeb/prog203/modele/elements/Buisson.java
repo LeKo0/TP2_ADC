@@ -11,10 +11,10 @@ import java.net.URL;
  *
  * @author Leo
  */
-public class Buisson extends Obstacles{
-    
+public class Buisson extends Obstacles {
+
     public Buisson() {
-        super("path de l'image");
+        super("images/buisson1.gif");
     }
-    
+
 }

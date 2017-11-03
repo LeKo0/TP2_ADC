@@ -5,9 +5,6 @@
  */
 package ca.qc.bdeb.prog203.modele.elements;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 /**
  *
  * @author Leo
@@ -15,10 +12,13 @@ import java.net.URL;
 public abstract class Ennemis extends Personnages {
 
     protected int vitesse;
+    protected int points;
 
-    public Ennemis(int pointsDeVie, int vitesse, String imageFace, String imageDos) {
-        super(imageFace, imageDos, pointsDeVie);
+    public Ennemis(int pointsDeVie, int points, int vitesse, String imageFace, String imageDos,
+            String imageDroite, String imageGauche) {
+        super(imageFace, imageDos, imageDroite, imageGauche, pointsDeVie);
         this.vitesse = vitesse;
+        this.points = points;
 
     }
 

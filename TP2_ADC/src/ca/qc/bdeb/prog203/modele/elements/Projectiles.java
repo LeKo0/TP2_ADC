@@ -10,7 +10,7 @@ package ca.qc.bdeb.prog203.modele.elements;
  * @author Leo
  */
 public abstract class Projectiles {
-    
+
     protected String image;
     protected int vitesse;
 
@@ -18,7 +18,5 @@ public abstract class Projectiles {
         this.image = image;
         this.vitesse = vitesse;
     }
-    
-    
-    
+
 }
