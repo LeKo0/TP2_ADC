@@ -5,10 +5,19 @@
  */
 package ca.qc.bdeb.prog203.vue;
 
+import java.awt.HeadlessException;
+import javax.swing.JFrame;
+
 /**
  *
  * @author 1666876
  */
-public class FenetreADC {
+public class FenetreADC extends JFrame {
+    
+
+    public FenetreADC() {
+        
+    }
+    
     
 }

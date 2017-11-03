@@ -3,19 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ca.qc.bdeb.prog203.modele;
+package ca.qc.bdeb.prog203.modele.elements;
 
-import java.util.Observable;
+import java.net.URL;
 
 /**
  *
- * @author 1666876
+ * @author Leo
  */
-public class ModeleADC extends Observable{
-
+public abstract class Obstacles {
     
-    public ModeleADC() {
-        
+    protected String image;
+
+    public Obstacles(String image) {
+        this.image = image;
     }
+    
+    
     
 }
