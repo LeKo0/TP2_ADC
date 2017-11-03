@@ -3,19 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ca.qc.bdeb.prog203.modele;
-
-import java.util.Observable;
+package ca.qc.bdeb.prog203.modele.elements;
 
 /**
  *
- * @author 1666876
+ * @author Leo
  */
-public class ModeleADC extends Observable{
+public class Laser extends Projectiles{
 
-    
-    public ModeleADC() {
-        
+    public Laser() {
+        //je sais pas encore c'est quoi la vitesse
+        super("path de l'image", 0);
     }
     
 }

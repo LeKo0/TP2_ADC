@@ -5,10 +5,21 @@
  */
 package ca.qc.bdeb.prog203.controlleur;
 
+import ca.qc.bdeb.prog203.modele.ModeleADC;
+import ca.qc.bdeb.prog203.vue.FenetreADC;
+
 /**
  *
  * @author 1666876
  */
 public class ControlleurADC {
+    
+    private final ModeleADC modeleADC = new ModeleADC();
+    private final FenetreADC fenetreADC = new FenetreADC();
+
+    public ControlleurADC() {
+    }
+    
+    
     
 }
