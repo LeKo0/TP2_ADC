@@ -5,8 +5,12 @@
  */
 package ca.qc.bdeb.prog203.vue;
 
+import ca.qc.bdeb.prog203.modele.ModeleADC;
 import java.awt.HeadlessException;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 /**
  *
@@ -14,8 +18,30 @@ import javax.swing.JFrame;
  */
 public class FenetreADC extends JFrame {
     
+    private JMenuBar mnuBar =new JMenuBar();
+    private JMenu mnuFichier = new JMenu("Fichier");
+    private JMenu mnuHelp = new JMenu("Help");
+    private JMenuItem mnuNouvellePartie = new JMenuItem("Nouvelle Partie");
+    
+    
 
-    public FenetreADC() {
+    public FenetreADC(ModeleADC modele) {
+        setSize(800,800);
+        setTitle("Tantacule Mauve: La contre-attaque");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        
+        
+        //les menus
+        setJMenuBar(mnuBar);
+        
+        
+        
+        
+        setVisible(true);
+        
+        
+        
+        
         
     }
     
