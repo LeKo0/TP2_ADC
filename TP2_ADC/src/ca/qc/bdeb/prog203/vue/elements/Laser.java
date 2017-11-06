@@ -20,5 +20,5 @@ public class Laser extends Projectiles {
         //je sais pas encore c'est quoi la vitesse
         super(new ImageIcon(new URL("path de l'image")), 0);
     }
-
+    
 }
