@@ -15,7 +15,7 @@ import ca.qc.bdeb.prog203.vue.FenetreADC;
 public class ControlleurADC {
 
     private final ModeleADC modeleADC = new ModeleADC();
-    private final FenetreADC fenetreADC = new FenetreADC();
+    private final FenetreADC fenetreADC = new FenetreADC(modeleADC);
 
     public ControlleurADC() {
     }
