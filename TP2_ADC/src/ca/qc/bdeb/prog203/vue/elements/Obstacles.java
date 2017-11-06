@@ -18,5 +18,9 @@ public abstract class Obstacles {
     public Obstacles(ImageIcon image) {
         this.image = image;
     }
-
+    
+    public ImageIcon getImage() {
+        return image;
+    }
+    
 }
