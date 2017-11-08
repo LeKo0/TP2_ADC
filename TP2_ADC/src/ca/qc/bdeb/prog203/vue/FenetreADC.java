@@ -6,11 +6,14 @@
 package ca.qc.bdeb.prog203.vue;
 
 import ca.qc.bdeb.prog203.modele.ModeleADC;
-import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -18,29 +21,82 @@ import javax.swing.JMenuItem;
  */
 public class FenetreADC extends JFrame {
     
-    private JMenuBar mnuBar =new JMenuBar();
-    private JMenu mnuFichier = new JMenu("Fichier");
-    private JMenu mnuHelp = new JMenu("Help");
-    private JMenuItem mnuNouvellePartie = new JMenuItem("Nouvelle Partie");
+    private JMenuBar mnuBar;
+    private JMenu mnuFichier, mnuHelp;
+    private JMenuItem mnuNouvellePartie, mnuQuitter, mnuAide, mnuAPropos;
+    private Monde pnlMonde;
     
     
-
     public FenetreADC(ModeleADC modele) {
         setSize(800,800);
         setTitle("Tantacule Mauve: La contre-attaque");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
-        
-        //les menus
-        setJMenuBar(mnuBar);
-        
+        initMenu();
+        initMonde();
+        initInfo();
         
         
         
         setVisible(true);
         
         
+    }
+    /**
+     * La méthode sera utilisé pour initialiser le menu
+     */
+    private void initMenu(){
+        mnuFichier = new JMenu("Fichier"); 
+        mnuHelp = new JMenu("Help");
         
+        mnuNouvellePartie = new JMenuItem("Nouvelle Partie");
+        mnuQuitter = new JMenuItem("Quitter");
+        mnuAide = new JMenuItem("Aide");
+        mnuAPropos = new JMenuItem("À propos");
+        mnuBar =new JMenuBar();
+        
+        //les menus
+        setJMenuBar(mnuBar);
+        
+        mnuBar.add(mnuFichier);
+        mnuBar.add(mnuHelp);
+        mnuFichier.add(mnuNouvellePartie);
+        mnuFichier.addSeparator();
+        mnuFichier.add(mnuQuitter);
+        mnuHelp.add(mnuAide);
+        mnuFichier.addSeparator();
+        mnuHelp.add(mnuAPropos);
+        
+    }
+    
+    /**
+     * La méthode sera utilisé pour initialiser l'affichage des informations sur le déroulement du jeux
+     */
+    private void initInfo(){
+        
+    }
+    /**
+     * La méthode sera utilisé pour initialiser l'affichage du jeux (c'est à dire les personnages, les buissons, etc)
+     */
+    private void initMonde(){
+        pnlMonde = new Monde();
+        add(pnlMonde);
+        
+    }
+    private void creerEvenement(){
+        mnuAide.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //à terminer
+                JOptionPane.showConfirmDialog(FenetreADC.this, "Les règles de ce jeu est de tuer les bonhommes qui viennent vers vous");
+            }
+        });
+        mnuAPropos.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+            }
+        });
         
         
     }

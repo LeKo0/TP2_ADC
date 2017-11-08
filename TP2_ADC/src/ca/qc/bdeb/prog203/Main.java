@@ -5,6 +5,9 @@
  */
 package ca.qc.bdeb.prog203;
 
+import ca.qc.bdeb.prog203.modele.ModeleADC;
+import ca.qc.bdeb.prog203.vue.FenetreADC;
+
 /**
  *
  * @author 1666876
@@ -15,7 +18,9 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        
+        ModeleADC modele = new ModeleADC();
+        FenetreADC fenetre = new FenetreADC(modele);
     }
     
 }
