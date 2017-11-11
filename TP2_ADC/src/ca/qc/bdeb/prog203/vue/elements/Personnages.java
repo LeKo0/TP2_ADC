@@ -16,8 +16,13 @@ import javax.swing.JComponent;
  */
 public abstract class Personnages extends JComponent {
 
+    public enum Direction {
+        HAUT, BAS, DROITE, GAUCHE
+    }
+
     protected Image imageFace, imageDos, imageDroite, imageGauche;
     protected int pointsDeVie;
+    protected Direction direction = Direction.DROITE; //Direction par default
 
     public Personnages(int pointsDeVie, Image imageFace, Image imageDos, Image imageDroite, Image imageGauche, int largeur, int hauteur) {
         this.imageFace = imageFace;
@@ -37,10 +42,27 @@ public abstract class Personnages extends JComponent {
         return pointsDeVie;
     }
 
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
-        g.drawImage(imageDos, 0, 0, this);
+
+        switch (direction) {
+            case HAUT:
+                g.drawImage(imageDos, 0, 0, this);
+                break;
+            case BAS:
+                g.drawImage(imageFace, 0, 0, this);
+                break;
+            case DROITE:
+                g.drawImage(imageDroite, 0, 0, this);
+                break;
+            case GAUCHE:
+                g.drawImage(imageGauche, 0, 0, this);
+        }
 
     }
 

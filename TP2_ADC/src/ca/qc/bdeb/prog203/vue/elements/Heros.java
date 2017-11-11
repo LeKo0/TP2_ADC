@@ -20,6 +20,7 @@ public class Heros extends Personnages {
         super(3, Toolkit.getDefaultToolkit().getImage("images/herofront.gif"), Toolkit.getDefaultToolkit().getImage("images/heroback.gif"),
                 Toolkit.getDefaultToolkit().getImage("images/herodroite.gif"), Toolkit.getDefaultToolkit().getImage("images/herogauche.gif"),
                 LARGEUR, HAUTEUR);
+
     }
 
 }
