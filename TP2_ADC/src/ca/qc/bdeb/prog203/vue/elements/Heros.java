@@ -5,9 +5,7 @@
  */
 package ca.qc.bdeb.prog203.vue.elements;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import javax.swing.ImageIcon;
+import java.awt.Toolkit;
 
 /**
  *
@@ -15,17 +13,13 @@ import javax.swing.ImageIcon;
  */
 public class Heros extends Personnages {
 
-    public Heros() throws MalformedURLException {
-        
-        
-        
-        super(new ImageIcon(new URL("images/herofront.gif")), new ImageIcon(new URL("images/heroback.gif")),
-                new ImageIcon(new URL("images/herodroite.gif")), new ImageIcon(new URL("images/herogauche.gif")), 3);
-    }
+    public static int HAUTEUR = 50, LARGEUR = 22;
 
-    @Override
-    void setPointsDeVie(int pointsDeVie) {
-        this.pointsDeVie = pointsDeVie;
+    public Heros() {
+
+        super(3, Toolkit.getDefaultToolkit().getImage("images/herofront.gif"), Toolkit.getDefaultToolkit().getImage("images/heroback.gif"),
+                Toolkit.getDefaultToolkit().getImage("images/herodroite.gif"), Toolkit.getDefaultToolkit().getImage("images/herogauche.gif"),
+                LARGEUR, HAUTEUR);
     }
 
 }

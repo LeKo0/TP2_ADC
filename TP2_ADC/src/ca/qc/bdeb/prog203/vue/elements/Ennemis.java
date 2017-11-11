@@ -5,9 +5,7 @@
  */
 package ca.qc.bdeb.prog203.vue.elements;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-
+import java.awt.Image;
 
 /**
  *
@@ -15,12 +13,14 @@ import javax.swing.ImageIcon;
  */
 public abstract class Ennemis extends Personnages {
 
+    public static int HAUTEUR = 43, LARGEUR = 34;
+
     protected int vitesse;
     protected int points;
 
-    public Ennemis(int pointsDeVie, int points, int vitesse, ImageIcon imageFace, ImageIcon imageDos,
-            ImageIcon imageDroite, ImageIcon imageGauche) {
-        super(imageFace, imageDos, imageDroite, imageGauche, pointsDeVie);
+    public Ennemis(int pointsDeVie, int points, int vitesse, Image imageFace, Image imageDos,
+            Image imageDroite, Image imageGauche) {
+        super(pointsDeVie, imageFace, imageDos, imageDroite, imageGauche, LARGEUR, HAUTEUR);
         this.vitesse = vitesse;
         this.points = points;
 

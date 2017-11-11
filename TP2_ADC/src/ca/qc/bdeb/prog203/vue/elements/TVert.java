@@ -5,27 +5,19 @@
  */
 package ca.qc.bdeb.prog203.vue.elements;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.awt.Toolkit;
 
 /**
  * Vitesse de 1 et PV de 1
  *
  * @author Leo
  */
-import javax.swing.ImageIcon;
-
 public class TVert extends Ennemis {
 
-    public TVert() throws MalformedURLException {
+    public TVert() {
 
-        super(1, 1, 1, new ImageIcon(new URL("images/greenfront.gif")), new ImageIcon(new URL("images/greenback.gif")),
-                new ImageIcon(new URL("images/greenfront.gif")), new ImageIcon(new URL("images/greenback.gif")));
-    }
-
-    @Override
-    void setPointsDeVie(int pointsDeVie) {
-        this.pointsDeVie = pointsDeVie;
+        super(1, 1, 1, Toolkit.getDefaultToolkit().getImage("images/greenfront.gif"), Toolkit.getDefaultToolkit().getImage("images/greenback.gif"),
+                Toolkit.getDefaultToolkit().getImage("images/greenfront.gif"), Toolkit.getDefaultToolkit().getImage("images/greenback.gif"));
     }
 
 }

@@ -5,47 +5,37 @@
  */
 package ca.qc.bdeb.prog203.vue;
 
+import ca.qc.bdeb.prog203.vue.elements.Buisson;
+import ca.qc.bdeb.prog203.vue.elements.Heros;
+import ca.qc.bdeb.prog203.vue.elements.Roche;
 import javax.swing.JPanel;
 import static java.lang.Math.round;
 import java.util.ArrayList;
 import java.awt.Image;
 import java.awt.Toolkit;
+import javax.swing.JLayeredPane;
 
 /**
  *
  * @author 1648266
  */
 public class Monde extends JPanel {
-    
-    private final Image imgGazon = Toolkit.getDefaultToolkit().getImage("images/floor1.gif");
-    
-    public Monde(){
+
+    public Monde() {
         setLayout(null);
-        initPlateforme();
+        init();
+
+    }
+
+    private void init() {
+        //Pour une raison que j'ignore paintComponent paint les images en du bas vers le haut. Si tu inverse this.add(roche) et this.add(gazon) tu vas voir que le gazon est sur le top de la roche.
+        Roche roche = new Roche();
+        Gazon gazon = new Gazon(16 * Gazon.DIMENSION_GAZON, 14 * Gazon.DIMENSION_GAZON);
+        roche.setLocation(100,100);
         
-        
+        this.add(roche);
+        this.add(gazon);
         
     }
-    private void initPlateforme(){
-        int nombre_x = round(this.getWidth()/imgGazon.getHeight(this));
-        int nombre_y = round(this.getHeight()/imgGazon.getWidth(this));
-        System.out.println(imgGazon.getHeight(this));
-        System.out.println(nombre_y);
-        
-        ArrayList<ArrayList> listeGazon = new ArrayList();
-        for (int i = 0; i<nombre_x; i++){
-            ArrayList<Dessin> temp = new ArrayList();
-            for (int j = 0; j<nombre_y; j++){
-                temp.add(new Dessin(imgGazon));
-                ((Dessin)temp.get(j)).setLocation(imgGazon.getWidth(this) * i, imgGazon.getHeight(this)*j);
-            }
-            listeGazon.add(temp);
-        }
-        for (int i = 0; i<nombre_x; i++){
-            for (int j = 0; j<nombre_y; j++){
-                add((Dessin) listeGazon.get(i).get(j));
-            }
-        }
-    }
-    
+
 }

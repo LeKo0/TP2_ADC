@@ -5,9 +5,7 @@
  */
 package ca.qc.bdeb.prog203.vue.elements;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import javax.swing.ImageIcon;
+import java.awt.Toolkit;
 
 /**
  * Vitesse de 2 et PV de 1
@@ -16,15 +14,10 @@ import javax.swing.ImageIcon;
  */
 public class TBleu extends Ennemis {
 
-    public TBleu() throws MalformedURLException {
+    public TBleu() {
 
-        super(2, 1, 2, new ImageIcon(new URL("images/bleufront.gif")), new ImageIcon(new URL("images/bleuback.gif")),
-                new ImageIcon(new URL("images/bleufront.gif")), new ImageIcon(new URL("images/bleuback.gif")));
-    }
-
-    @Override
-    void setPointsDeVie(int pointsDeVie) {
-        this.pointsDeVie = pointsDeVie;
+        super(2, 1, 2, Toolkit.getDefaultToolkit().getImage("images/bleufront.gif"), Toolkit.getDefaultToolkit().getImage("images/bleuback.gif"),
+                Toolkit.getDefaultToolkit().getImage("images/bleufront.gif"), Toolkit.getDefaultToolkit().getImage("images/bleuback.gif"));
     }
 
 }

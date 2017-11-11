@@ -5,10 +5,11 @@
  */
 package ca.qc.bdeb.prog203.vue.elements;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.swing.ImageIcon;
-
 
 /**
  *
@@ -16,8 +17,8 @@ import javax.swing.ImageIcon;
  */
 public class Roche extends Obstacles {
 
-    public Roche() throws MalformedURLException {
-        super(new ImageIcon(new URL("images/roche1.gif")));
+    public Roche() {
+        super(Toolkit.getDefaultToolkit().getImage("images/roche1.gif"));
     }
 
 }

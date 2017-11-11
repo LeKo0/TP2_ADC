@@ -5,6 +5,8 @@
  */
 package ca.qc.bdeb.prog203.vue.elements;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.swing.ImageIcon;
@@ -15,8 +17,8 @@ import javax.swing.ImageIcon;
  */
 public class Buisson extends Obstacles {
 
-    public Buisson() throws MalformedURLException {
-        super(new ImageIcon(new URL("images/buisson1.gif")));
+    public Buisson() {
+        super(Toolkit.getDefaultToolkit().getImage("images/buisson1.gif"));
     }
 
 }

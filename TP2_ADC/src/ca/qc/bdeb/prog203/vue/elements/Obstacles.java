@@ -5,22 +5,30 @@
  */
 package ca.qc.bdeb.prog203.vue.elements;
 
-import javax.swing.ImageIcon;
+import java.awt.Graphics;
+import java.awt.Image;
+import javax.swing.JComponent;
 
 /**
  *
  * @author Leo
  */
-public abstract class Obstacles {
+public abstract class Obstacles extends JComponent {
 
-    protected ImageIcon image;
+    public static int HAUTEUR = 32, LARGEUR = 32;
 
-    public Obstacles(ImageIcon image) {
+    protected Image image;
+
+    public Obstacles(Image image) {
         this.image = image;
+        setSize(LARGEUR, HAUTEUR);
     }
-    
-    public ImageIcon getImage() {
-        return image;
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(image, 0, 0, this);
+
     }
-    
+
 }

@@ -5,10 +5,11 @@
  */
 package ca.qc.bdeb.prog203.vue.elements;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.swing.ImageIcon;
-
 
 /**
  *
@@ -16,9 +17,10 @@ import javax.swing.ImageIcon;
  */
 public class Laser extends Projectiles {
 
-    public Laser() throws MalformedURLException {
-        //je sais pas encore c'est quoi la vitesse
-        super(new ImageIcon(new URL("path de l'image")), 0);
+    public static int LARGEUR = 0, HAUTEUR = 0;
+
+    public Laser() {
+        super(Toolkit.getDefaultToolkit().getImage("path de l'image"), 0, 0, LARGEUR, HAUTEUR);
     }
-    
+
 }
