@@ -7,11 +7,14 @@ package ca.qc.bdeb.prog203.vue;
 
 import ca.qc.bdeb.prog203.modele.ModeleADC;
 import ca.qc.bdeb.prog203.vue.elements.Roche;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -28,20 +31,19 @@ public class FenetreADC extends JFrame {
     private JMenu mnuFichier, mnuHelp;
     private JMenuItem mnuNouvellePartie, mnuQuitter, mnuAide, mnuAPropos;
     private Monde pnlMonde;
+    private JPanel pnlInfo;
 
     public FenetreADC(ModeleADC modele) {
-        setSize(17 * 32, 16 * 32);
         setTitle("Tantacule Mauve: La contre-attaque");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         initMenu();
         initMonde();
         initInfo();
-
         creerEvenement();
-        
-        pack();
 
+        setResizable(false);
+        pack();
         setVisible(true);
 
     }
@@ -72,12 +74,18 @@ public class FenetreADC extends JFrame {
 
     }
 
+    
+    
     /**
      * La méthode sera utilisé pour initialiser l'affichage des informations sur
      * le déroulement du jeux
      */
     private void initInfo() {
 
+        pnlInfo = new JPanel();
+        add(pnlInfo,BorderLayout.SOUTH);
+        pnlInfo.add(new JLabel("JPANEL INFO"));
+        
     }
 
     /**

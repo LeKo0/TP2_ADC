@@ -39,6 +39,7 @@ public class Monde extends JPanel {
         //Ajout du gazon
         add(gazon, 0);
                 
+        System.out.println(gazon.getSize());
         //Ajout du heros au centre
         add(heros,0);
         heros.setLocation(8*32-11, 7*32-25);
