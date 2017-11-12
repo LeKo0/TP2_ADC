@@ -16,7 +16,8 @@ import javax.swing.JComponent;
  */
 public class Gazon extends JComponent {
 
-    public static final Image IMAGE_GAZON = Toolkit.getDefaultToolkit().getImage("images/floor1.gif");
+    public static final Image IMAGE_GAZON1 = Toolkit.getDefaultToolkit().getImage("images/floor1.gif");
+    public static final Image IMAGE_GAZON2 = Toolkit.getDefaultToolkit().getImage("images/floor2.gif");
     public static final int DIMENSION_GAZON = 32; //On doit le mettre manuellement 
     private int hauteur, largeur;
 
@@ -34,8 +35,11 @@ public class Gazon extends JComponent {
         super.paintComponent(g);
         for (int i = 0; i < hauteur; i++) {
             for (int j = 0; j < largeur; j++) {
-
-                g.drawImage(IMAGE_GAZON, i * DIMENSION_GAZON, j * DIMENSION_GAZON, this);
+                if ((i + j) % 2 == 0) {
+                    g.drawImage(IMAGE_GAZON1, i * DIMENSION_GAZON, j * DIMENSION_GAZON, this);
+                } else {
+                    g.drawImage(IMAGE_GAZON2, i * DIMENSION_GAZON, j * DIMENSION_GAZON, this);
+                }
 
             }
         }

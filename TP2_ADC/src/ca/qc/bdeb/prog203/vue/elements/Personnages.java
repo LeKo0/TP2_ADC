@@ -20,6 +20,7 @@ public abstract class Personnages extends JComponent {
         HAUT, BAS, DROITE, GAUCHE
     }
 
+    protected int deltaX, deltaY;
     protected Image imageFace, imageDos, imageDroite, imageGauche;
     protected int pointsDeVie;
     protected Direction direction = Direction.DROITE; //Direction par default

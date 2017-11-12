@@ -15,13 +15,13 @@ public abstract class Ennemis extends Personnages {
 
     public static int HAUTEUR = 43, LARGEUR = 34;
 
-    protected int vitesse;
     protected int points;
+    protected int vitesse;
 
     public Ennemis(int pointsDeVie, int points, int vitesse, Image imageFace, Image imageDos,
             Image imageDroite, Image imageGauche) {
         super(pointsDeVie, imageFace, imageDos, imageDroite, imageGauche, LARGEUR, HAUTEUR);
-        this.vitesse = vitesse;
+
         this.points = points;
 
     }

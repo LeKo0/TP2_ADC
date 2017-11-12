@@ -8,8 +8,7 @@ package ca.qc.bdeb.prog203.vue.elements;
 import java.awt.Toolkit;
 
 /**
- *
- * @author Leo
+ * Vitesse par defaut = 0,0
  */
 public class Heros extends Personnages {
 

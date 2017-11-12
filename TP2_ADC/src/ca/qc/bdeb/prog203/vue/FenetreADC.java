@@ -30,7 +30,7 @@ public class FenetreADC extends JFrame {
     private Monde pnlMonde;
 
     public FenetreADC(ModeleADC modele) {
-        setSize(16 * 32, 14 * 32);
+        setSize(17 * 32, 16 * 32);
         setTitle("Tantacule Mauve: La contre-attaque");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -39,6 +39,8 @@ public class FenetreADC extends JFrame {
         initInfo();
 
         creerEvenement();
+        
+        pack();
 
         setVisible(true);
 
