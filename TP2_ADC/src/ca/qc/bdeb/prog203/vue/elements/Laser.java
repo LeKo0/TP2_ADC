@@ -5,11 +5,8 @@
  */
 package ca.qc.bdeb.prog203.vue.elements;
 
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.net.MalformedURLException;
-import java.net.URL;
-import javax.swing.ImageIcon;
+import java.awt.Color;
+import java.awt.Graphics;
 
 /**
  *
@@ -17,10 +14,29 @@ import javax.swing.ImageIcon;
  */
 public class Laser extends Projectiles {
 
-    public static int LARGEUR = 0, HAUTEUR = 0;
+    public static int LARGEUR = 20, HAUTEUR = 5;
 
-    public Laser() {
-        super(Toolkit.getDefaultToolkit().getImage("path de l'image"), 0, 0, LARGEUR, HAUTEUR);
+    public Laser(int deltaX, int deltaY) {
+
+        super(deltaX, deltaY, LARGEUR, HAUTEUR);
+
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        if (deltaY == 0) {
+            g.fillRect(0, 0, LARGEUR, HAUTEUR);
+            g.setColor(Color.red);
+            setSize(LARGEUR, HAUTEUR);
+
+        } else {
+            g.fillRect(0, 0, HAUTEUR, LARGEUR);
+            g.setColor(Color.red);
+            setSize(HAUTEUR, LARGEUR);
+        }
+
     }
 
 }

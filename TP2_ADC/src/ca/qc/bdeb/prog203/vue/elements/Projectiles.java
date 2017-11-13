@@ -5,6 +5,7 @@
  */
 package ca.qc.bdeb.prog203.vue.elements;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
@@ -16,24 +17,32 @@ import javax.swing.JComponent;
  */
 public abstract class Projectiles extends JComponent {
 
-    protected Image image;
-    protected int vitesseX, vitesseY;
+    protected int deltaX, deltaY;
     protected int hauteur, largeur;
+    protected int vitesse = 10;
 
-    public Projectiles(Image image, int vitesseX, int vitesseY, int largeur, int hauteur) {
-        this.image = image;
-        this.vitesseX = vitesseX;
-        this.vitesseY = vitesseY;
+    public Projectiles(int deltaX, int deltaY, int largeur, int hauteur) {
+        this.deltaX = deltaX;
+        this.deltaY = deltaY;
         this.hauteur = hauteur;
         this.largeur = largeur;
 
         setSize(largeur, hauteur);
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(image, 0, 0, this);
+    public void setDeltaX(int deltaX) {
+        this.deltaX = deltaX;
+    }
+
+    public void setDeltaY(int deltaY) {
+        this.deltaY = deltaY;
+    }
+    
+
+    public void bouger() {
+
+        setLocation(getX() + deltaX*vitesse, getY() + deltaY*vitesse);
+
     }
 
 }

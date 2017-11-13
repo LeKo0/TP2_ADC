@@ -50,6 +50,11 @@ public abstract class Personnages extends JComponent {
         this.direction = direction;
     }
 
+    public Direction getDirection() {
+        return direction;
+    }
+    
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.

@@ -5,13 +5,10 @@
  */
 package ca.qc.bdeb.prog203.vue.elements;
 
-import static ca.qc.bdeb.prog203.vue.elements.Laser.HAUTEUR;
-import static ca.qc.bdeb.prog203.vue.elements.Laser.LARGEUR;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.net.MalformedURLException;
-import java.net.URL;
-import javax.swing.ImageIcon;
+import java.awt.Color;
+import java.awt.Graphics;
+
+
 
 /**
  *
@@ -19,10 +16,16 @@ import javax.swing.ImageIcon;
  */
 public class Balle extends Projectiles {
 
-    public static int LARGEUR = 0, HAUTEUR = 0;
+    public static int LARGEUR = 10, HAUTEUR = 10;
 
-    public Balle() {
-        super(Toolkit.getDefaultToolkit().getImage("path de l'image"), 0, 0, LARGEUR, HAUTEUR);
+    public Balle(int deltaX, int deltaY) {
+        super(deltaX, deltaY, LARGEUR, HAUTEUR);
     }
-
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.fillOval(0, 0, LARGEUR, HAUTEUR);
+        g.setColor(Color.blue);
+        
+    }
 }

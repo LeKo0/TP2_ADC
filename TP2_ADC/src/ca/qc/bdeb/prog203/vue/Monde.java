@@ -5,82 +5,167 @@
  */
 package ca.qc.bdeb.prog203.vue;
 
+import ca.qc.bdeb.prog203.vue.elements.Balle;
 import ca.qc.bdeb.prog203.vue.elements.Buisson;
 import ca.qc.bdeb.prog203.vue.elements.Heros;
+import ca.qc.bdeb.prog203.vue.elements.Laser;
+import ca.qc.bdeb.prog203.vue.elements.Obstacles;
 import ca.qc.bdeb.prog203.vue.elements.Personnages;
+import ca.qc.bdeb.prog203.vue.elements.Projectiles;
 import ca.qc.bdeb.prog203.vue.elements.Roche;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.TimerTask;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 /**
  *
  * @author 1648266
  */
 public class Monde extends JPanel {
-    
+
+    private enum typeProjectile {
+        LASER, BALLE
+    }
+
+    private typeProjectile typeProjectile;
     private Heros heros;
     private final int tailleImageGazon = 32;
     private ArrayList<Integer> listeKeyCodes = new ArrayList();
+    private ArrayList<Projectiles> projectiles = new ArrayList<Projectiles>();
+    private ArrayList<Obstacles> obstacles = new ArrayList<Obstacles>();
+    private Timer tirer = new javax.swing.Timer(250, new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            tirer();
+        }
+
+    });
+    ;
+
     private Thread thread = new Thread() {
         @Override
         public void run() {
             while (true) {
+                majCollision();
                 majJeu();
-                repaint();
                 try {
-                    Thread.sleep(20);
+                    Thread.sleep(15);
                 } catch (InterruptedException ex) {
                 }
-                
+
             }
-            
+
         }
-        
+
     };
 
-    private void majJeu() {
-        
-        if(listeKeyCodes.contains(KeyEvent.VK_A) && heros.getX() - heros.getVitesse()>=0){
-            heros.setDirection(Personnages.Direction.GAUCHE);
-            heros.setLocation(heros.getX() - heros.getVitesse(),heros.getY());
+    public Monde() {
+        setPreferredSize(new Dimension(16 * tailleImageGazon, 14 * tailleImageGazon));
+        setLayout(null);
+        typeProjectile = typeProjectile.LASER;
+        init();
+        tirer.setInitialDelay(0);
+        nouvellePartie();
+
+    }
+
+    private void majCollision() {
+
+    }
+
+    private void tirer() {
+
+        switch (typeProjectile) {
+            case LASER:
+                tirerLaser();
+                break;
+            case BALLE:
+                tirerBalle();
         }
-        if(listeKeyCodes.contains(KeyEvent.VK_S) && heros.getY() + heros.getHeight() + heros.getVitesse()<= this.getHeight()){
+
+    }
+
+    private void majJeu() {
+
+        if (listeKeyCodes.contains(KeyEvent.VK_A) && heros.getX() - heros.getVitesse() >= 0) {
+            heros.setDirection(Personnages.Direction.GAUCHE);
+            heros.setLocation(heros.getX() - heros.getVitesse(), heros.getY());
+        }
+        if (listeKeyCodes.contains(KeyEvent.VK_S) && heros.getY() + heros.getHeight() + heros.getVitesse() <= this.getHeight()) {
             heros.setDirection(Personnages.Direction.BAS);
             heros.setLocation(heros.getX(), heros.getY() + heros.getVitesse());
         }
-        if(listeKeyCodes.contains(KeyEvent.VK_W) && heros.getY() - heros.getVitesse() >= 0){
+        if (listeKeyCodes.contains(KeyEvent.VK_W) && heros.getY() - heros.getVitesse() >= 0) {
             heros.setDirection(Personnages.Direction.HAUT);
             heros.setLocation(heros.getX(), heros.getY() - heros.getVitesse());
         }
-        if(listeKeyCodes.contains(KeyEvent.VK_D) && heros.getX() + heros.getWidth() + heros.getVitesse() <= this.getWidth()){
+        if (listeKeyCodes.contains(KeyEvent.VK_D) && heros.getX() + heros.getWidth() + heros.getVitesse() <= this.getWidth()) {
             heros.setDirection(Personnages.Direction.DROITE);
             heros.setLocation(heros.getX() + heros.getVitesse(), heros.getY());
         }
-        
-        
+
+        if (listeKeyCodes.contains(KeyEvent.VK_SPACE)) {
+            if (!tirer.isRunning()) {
+                tirer.start();
+            }
+        } else {
+            tirer.stop();
+        }
+
+        for (Projectiles projectile : projectiles) {
+            projectile.bouger();
+        }
+
+    }
+
+    private void tirerLaser() {
+
+        Laser laserTemp;
+
+        switch (heros.getDirection()) {
+            case HAUT:
+                laserTemp = new Laser(0, -1);
+                break;
+            case BAS:
+                laserTemp = new Laser(0, 1);
+                break;
+            case DROITE:
+                laserTemp = new Laser(1, 0);
+                break;
+            default: //case GAUCHE:
+                laserTemp = new Laser(-1, 0);
+        }
+        laserTemp.setLocation(heros.getX(), heros.getY());
+        projectiles.add(laserTemp);
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                add(laserTemp, 0);
+            }
+        });
+
+    }
+
+    private void tirerBalle() {
+
     }
 
     private void nouvellePartie() {
         creerEvenement();
         thread.start();
-        
+
     }
-    
-    public Monde() {
-        setPreferredSize(new Dimension(16 * tailleImageGazon, 14 * tailleImageGazon));
-        setLayout(null);
-        init();
-        nouvellePartie();
-        
-    }
-    
-    private void init() {        
+
+    private void init() {
         heros = new Heros();
-        
+
         Gazon gazon = new Gazon(16 * Gazon.DIMENSION_GAZON, 14 * Gazon.DIMENSION_GAZON);
         ArrayList<Roche> roches = new ArrayList<>();
         ArrayList<Buisson> buissons = new ArrayList<>();
@@ -89,7 +174,7 @@ public class Monde extends JPanel {
 
         //Ajout du gazon
         add(gazon, 0);
-        
+
         System.out.println(gazon.getSize());
         //Ajout du heros au centre
         add(heros, 0);
@@ -111,7 +196,6 @@ public class Monde extends JPanel {
         //Disposition des buissons
         for (int i = 0; i < 4; i++) {
             buissonTemp = new Buisson();
-            buissonTemp.setLocation(i, i);
             buissons.add(buissonTemp);
             add(buissonTemp, 0);
         }
@@ -119,25 +203,25 @@ public class Monde extends JPanel {
         buissons.get(1).setLocation(12 * tailleImageGazon, 3 * tailleImageGazon);
         buissons.get(2).setLocation(3 * tailleImageGazon, 10 * tailleImageGazon);
         buissons.get(3).setLocation(12 * tailleImageGazon, 10 * tailleImageGazon);
-        
+
     }
-    
+
     private void creerEvenement() {
         this.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyPressed(KeyEvent e){
-                if(!listeKeyCodes.contains(e.getKeyCode())){
+            public void keyPressed(KeyEvent e) {
+                if (!listeKeyCodes.contains(e.getKeyCode())) {
                     listeKeyCodes.add(e.getKeyCode());
                 }
             }
+
             @Override
-            public void keyReleased(KeyEvent e){
+            public void keyReleased(KeyEvent e) {
                 listeKeyCodes.remove(new Integer(e.getKeyCode()));
             }
-            
+
         });
-        
-        
+
     }
-    
+
 }
