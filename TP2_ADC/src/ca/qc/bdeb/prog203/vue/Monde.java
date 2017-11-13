@@ -44,19 +44,19 @@ public class Monde extends JPanel {
 
     private void majJeu() {
         
-        if(listeKeyCodes.contains(KeyEvent.VK_A)){
+        if(listeKeyCodes.contains(KeyEvent.VK_A) && heros.getX() - heros.getVitesse()>=0){
             heros.setDirection(Personnages.Direction.GAUCHE);
             heros.setLocation(heros.getX() - heros.getVitesse(),heros.getY());
         }
-        if(listeKeyCodes.contains(KeyEvent.VK_S)){
+        if(listeKeyCodes.contains(KeyEvent.VK_S) && heros.getY() + heros.getHeight() + heros.getVitesse()<= this.getHeight()){
             heros.setDirection(Personnages.Direction.BAS);
             heros.setLocation(heros.getX(), heros.getY() + heros.getVitesse());
         }
-        if(listeKeyCodes.contains(KeyEvent.VK_W)){
+        if(listeKeyCodes.contains(KeyEvent.VK_W) && heros.getY() - heros.getVitesse() >= 0){
             heros.setDirection(Personnages.Direction.HAUT);
             heros.setLocation(heros.getX(), heros.getY() - heros.getVitesse());
         }
-        if(listeKeyCodes.contains(KeyEvent.VK_D)){
+        if(listeKeyCodes.contains(KeyEvent.VK_D) && heros.getX() + heros.getWidth() + heros.getVitesse() <= this.getWidth()){
             heros.setDirection(Personnages.Direction.DROITE);
             heros.setLocation(heros.getX() + heros.getVitesse(), heros.getY());
         }
