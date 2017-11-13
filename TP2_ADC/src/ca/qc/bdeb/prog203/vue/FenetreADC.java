@@ -97,8 +97,25 @@ public class FenetreADC extends JFrame {
         add(pnlMonde);
 
     }
+    private void nouvellePartie(){
+        
+    }
+    
 
     private void creerEvenement() {
+        mnuNouvellePartie.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                nouvellePartie();
+            }
+        });
+        mnuQuitter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        
         mnuAide.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

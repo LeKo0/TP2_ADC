@@ -39,8 +39,11 @@ public class Monde extends JPanel {
     private Heros heros;
     private final int tailleImageGazon = 32;
     private ArrayList<Integer> listeKeyCodes = new ArrayList();
+    private boolean[] bouger = {false, false, false, false};
+
     private ArrayList<Projectiles> projectiles = new ArrayList<Projectiles>();
     private ArrayList<Obstacles> obstacles = new ArrayList<Obstacles>();
+
     private Timer tirer = new javax.swing.Timer(250, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent ae) {
@@ -78,7 +81,24 @@ public class Monde extends JPanel {
     }
 
     private void majCollision() {
-
+        for (Obstacles obstacle : obstacles) {
+            if (heros.getX() - heros.getMaxVitesse() >= 0) {
+                heros.setDirection(Personnages.Direction.GAUCHE);
+                heros.setLocation(heros.getX() - heros.getMaxVitesse(), heros.getY());
+            }
+            if (heros.getY() + heros.getHeight() + heros.getMaxVitesse() <= this.getHeight()) {
+                heros.setDirection(Personnages.Direction.BAS);
+                heros.setLocation(heros.getX(), heros.getY() + heros.getMaxVitesse());
+            }
+            if (heros.getY() - heros.getMaxVitesse() >= 0) {
+                heros.setDirection(Personnages.Direction.HAUT);
+                heros.setLocation(heros.getX(), heros.getY() - heros.getMaxVitesse());
+            }
+            if (heros.getX() + heros.getWidth() + heros.getMaxVitesse() <= this.getWidth()) {
+                heros.setDirection(Personnages.Direction.DROITE);
+                heros.setLocation(heros.getX() + heros.getMaxVitesse(), heros.getY());
+            }
+        }
     }
 
     private void tirer() {
@@ -95,21 +115,21 @@ public class Monde extends JPanel {
 
     private void majJeu() {
 
-        if (listeKeyCodes.contains(KeyEvent.VK_A) && heros.getX() - heros.getVitesse() >= 0) {
+        if (heros.getX() - heros.getMaxVitesse() >= 0) {
             heros.setDirection(Personnages.Direction.GAUCHE);
-            heros.setLocation(heros.getX() - heros.getVitesse(), heros.getY());
+            heros.setLocation(heros.getX() - heros.getMaxVitesse(), heros.getY());
         }
-        if (listeKeyCodes.contains(KeyEvent.VK_S) && heros.getY() + heros.getHeight() + heros.getVitesse() <= this.getHeight()) {
+        if (heros.getY() + heros.getHeight() + heros.getMaxVitesse() <= this.getHeight()) {
             heros.setDirection(Personnages.Direction.BAS);
-            heros.setLocation(heros.getX(), heros.getY() + heros.getVitesse());
+            heros.setLocation(heros.getX(), heros.getY() + heros.getMaxVitesse());
         }
-        if (listeKeyCodes.contains(KeyEvent.VK_W) && heros.getY() - heros.getVitesse() >= 0) {
+        if (heros.getY() - heros.getMaxVitesse() >= 0) {
             heros.setDirection(Personnages.Direction.HAUT);
-            heros.setLocation(heros.getX(), heros.getY() - heros.getVitesse());
+            heros.setLocation(heros.getX(), heros.getY() - heros.getMaxVitesse());
         }
-        if (listeKeyCodes.contains(KeyEvent.VK_D) && heros.getX() + heros.getWidth() + heros.getVitesse() <= this.getWidth()) {
+        if (heros.getX() + heros.getWidth() + heros.getMaxVitesse() <= this.getWidth()) {
             heros.setDirection(Personnages.Direction.DROITE);
-            heros.setLocation(heros.getX() + heros.getVitesse(), heros.getY());
+            heros.setLocation(heros.getX() + heros.getMaxVitesse(), heros.getY());
         }
 
         if (listeKeyCodes.contains(KeyEvent.VK_SPACE)) {
@@ -212,6 +232,17 @@ public class Monde extends JPanel {
             public void keyPressed(KeyEvent e) {
                 if (!listeKeyCodes.contains(e.getKeyCode())) {
                     listeKeyCodes.add(e.getKeyCode());
+                    if (e.getKeyCode() == KeyEvent.VK_A ){
+                        bouger[0] = true;
+                    }else if (e.getKeyCode() == KeyEvent.VK_S) {
+                        bouger[1] = true;
+                    }else if(e.getKeyCode() == KeyEvent.VK_W){
+                        bouger[2] = true;
+                    }else if(e.getKeyCode() == KeyEvent.VK_D){
+                        bouger[3] = true;
+                    }
+                    
+                    
                 }
             }
 

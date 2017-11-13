@@ -19,14 +19,16 @@ public abstract class Personnages extends JComponent {
     public enum Direction {
         HAUT, BAS, DROITE, GAUCHE
     }
-
-    protected int vitesse;
+    
+    
+    
+    protected final int maxVitesse;
     protected Image imageFace, imageDos, imageDroite, imageGauche;
     protected int pointsDeVie;
     protected Direction direction = Direction.DROITE; //Direction par default
 
-    public Personnages(int pointsDeVie, Image imageFace, Image imageDos, Image imageDroite, Image imageGauche, int largeur, int hauteur, int vitesse) {
-        this.vitesse = vitesse;
+    public Personnages(int pointsDeVie, Image imageFace, Image imageDos, Image imageDroite, Image imageGauche, int largeur, int hauteur, int maxVitesse) {
+        this.maxVitesse = maxVitesse;
         this.imageFace = imageFace;
         this.imageDos = imageDos;
         this.imageDroite = imageDroite;
@@ -43,8 +45,8 @@ public abstract class Personnages extends JComponent {
     public int getPointsDeVie() {
         return pointsDeVie;
     }
-    public int getVitesse(){
-        return vitesse;
+    public int getMaxVitesse(){
+        return maxVitesse;
     }
     public void setDirection(Direction direction) {
         this.direction = direction;
