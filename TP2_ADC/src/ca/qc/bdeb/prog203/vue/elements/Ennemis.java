@@ -14,13 +14,13 @@ import java.awt.Image;
 public abstract class Ennemis extends Personnages {
 
     public static int HAUTEUR = 43, LARGEUR = 34;
-
+    protected int deltaX, deltaY;
     protected int points;
-    protected int vitesse;
+    
 
-    public Ennemis(int pointsDeVie, int points, int vitesse, Image imageFace, Image imageDos,
+    public Ennemis(int pointsDeVie, int points,int vitesse, Image imageFace, Image imageDos,
             Image imageDroite, Image imageGauche) {
-        super(pointsDeVie, imageFace, imageDos, imageDroite, imageGauche, LARGEUR, HAUTEUR);
+        super(pointsDeVie, imageFace, imageDos, imageDroite, imageGauche, LARGEUR, HAUTEUR, vitesse);
 
         this.points = points;
 

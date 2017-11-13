@@ -12,6 +12,7 @@ import ca.qc.bdeb.prog203.vue.elements.Roche;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
@@ -45,15 +46,19 @@ public class Monde extends JPanel {
         
         if(listeKeyCodes.contains(KeyEvent.VK_A)){
             heros.setDirection(Personnages.Direction.GAUCHE);
+            heros.setLocation(heros.getX() - heros.getVitesse(),heros.getY());
         }
         if(listeKeyCodes.contains(KeyEvent.VK_S)){
             heros.setDirection(Personnages.Direction.BAS);
+            heros.setLocation(heros.getX(), heros.getY() + heros.getVitesse());
         }
         if(listeKeyCodes.contains(KeyEvent.VK_W)){
             heros.setDirection(Personnages.Direction.HAUT);
+            heros.setLocation(heros.getX(), heros.getY() - heros.getVitesse());
         }
         if(listeKeyCodes.contains(KeyEvent.VK_D)){
             heros.setDirection(Personnages.Direction.DROITE);
+            heros.setLocation(heros.getX() + heros.getVitesse(), heros.getY());
         }
         
         
@@ -118,7 +123,7 @@ public class Monde extends JPanel {
     }
     
     private void creerEvenement() {
-        addKeyListener(new KeyAdapter() {
+        this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e){
                 if(!listeKeyCodes.contains(e.getKeyCode())){
@@ -131,6 +136,7 @@ public class Monde extends JPanel {
             }
             
         });
+        
         
     }
     

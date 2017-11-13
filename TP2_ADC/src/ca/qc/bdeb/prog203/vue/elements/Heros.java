@@ -13,12 +13,13 @@ import java.awt.Toolkit;
 public class Heros extends Personnages {
 
     public static int HAUTEUR = 50, LARGEUR = 22;
-
+    
+    
     public Heros() {
 
         super(3, Toolkit.getDefaultToolkit().getImage("images/herofront.gif"), Toolkit.getDefaultToolkit().getImage("images/heroback.gif"),
                 Toolkit.getDefaultToolkit().getImage("images/herodroite.gif"), Toolkit.getDefaultToolkit().getImage("images/herogauche.gif"),
-                LARGEUR, HAUTEUR);
+                LARGEUR, HAUTEUR, 5);
 
     }
 

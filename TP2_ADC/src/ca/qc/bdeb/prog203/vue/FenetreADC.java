@@ -45,7 +45,7 @@ public class FenetreADC extends JFrame {
         setResizable(false);
         pack();
         setVisible(true);
-
+        pnlMonde.setFocusable(true);
     }
 
     /**

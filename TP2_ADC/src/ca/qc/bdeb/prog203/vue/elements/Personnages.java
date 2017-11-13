@@ -20,12 +20,13 @@ public abstract class Personnages extends JComponent {
         HAUT, BAS, DROITE, GAUCHE
     }
 
-    protected int deltaX, deltaY;
+    protected int vitesse;
     protected Image imageFace, imageDos, imageDroite, imageGauche;
     protected int pointsDeVie;
     protected Direction direction = Direction.DROITE; //Direction par default
 
-    public Personnages(int pointsDeVie, Image imageFace, Image imageDos, Image imageDroite, Image imageGauche, int largeur, int hauteur) {
+    public Personnages(int pointsDeVie, Image imageFace, Image imageDos, Image imageDroite, Image imageGauche, int largeur, int hauteur, int vitesse) {
+        this.vitesse = vitesse;
         this.imageFace = imageFace;
         this.imageDos = imageDos;
         this.imageDroite = imageDroite;
@@ -42,7 +43,9 @@ public abstract class Personnages extends JComponent {
     public int getPointsDeVie() {
         return pointsDeVie;
     }
-
+    public int getVitesse(){
+        return vitesse;
+    }
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
