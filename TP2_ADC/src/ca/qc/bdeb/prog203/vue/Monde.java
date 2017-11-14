@@ -58,7 +58,7 @@ public class Monde extends JPanel {
         public void run() {
             while (true) {
                 majJeu();
-                
+
                 try {
                     Thread.sleep(15);
                 } catch (InterruptedException ex) {
@@ -97,7 +97,25 @@ public class Monde extends JPanel {
             heros.setDirection(Personnages.Direction.GAUCHE);
             heros.setLocation(heros.getX() - heros.getMaxVitesse(), heros.getY());
         }
-
+        if (listeKeyCodes.contains(KeyEvent.VK_D)) {
+            heros.setDirection(Personnages.Direction.DROITE);
+            heros.setLocation(heros.getX() + heros.getMaxVitesse(), heros.getY());
+        }
+        
+        for (Obstacles obstacle : obstacles) {
+            if (heros.getBounds().intersects(obstacle.getBounds())) {
+                heros.setLocation(lastPosition[0], heros.getY());
+            }
+        }
+        if (heros.getX() - heros.getMaxVitesse() <= 0) {
+            heros.setLocation(lastPosition[0], heros.getY());
+        }
+        if (heros.getX() + heros.getWidth() + heros.getMaxVitesse() >= this.getWidth()) {
+            heros.setLocation(lastPosition[0], heros.getY());
+        }
+        lastPosition[0] = heros.getX();
+        
+        
         if (listeKeyCodes.contains(KeyEvent.VK_S)) {
             heros.setDirection(Personnages.Direction.BAS);
             heros.setLocation(heros.getX(), heros.getY()
@@ -107,31 +125,19 @@ public class Monde extends JPanel {
             heros.setDirection(Personnages.Direction.HAUT);
             heros.setLocation(heros.getX(), heros.getY() - heros.getMaxVitesse());
         }
-        if (listeKeyCodes.contains(KeyEvent.VK_D)) {
-            heros.setDirection(Personnages.Direction.DROITE);
-            heros.setLocation(heros.getX() + heros.getMaxVitesse(), heros.getY());
-        }
-        
-        
         for (Obstacles obstacle : obstacles) {
             if (heros.getBounds().intersects(obstacle.getBounds())) {
-                heros.setLocation(lastPosition[0], lastPosition[1]);
+                heros.setLocation(heros.getX() ,lastPosition[1]);
             }
         }
-
-        if (heros.getX() - heros.getMaxVitesse() <= 0) {
-            heros.setLocation(lastPosition[0], heros.getY());
-        }
+        
         if (heros.getY() + heros.getHeight() + heros.getMaxVitesse() >= this.getHeight()) {
             heros.setLocation(heros.getX(), lastPosition[1]);
         }
         if (heros.getY() - heros.getMaxVitesse() <= 0) {
             heros.setLocation(heros.getX(), lastPosition[1]);
         }
-        if (heros.getX() + heros.getWidth() + heros.getMaxVitesse() >= this.getWidth()) {
-            heros.setLocation(lastPosition[0], heros.getY());
-        }
-        lastPosition[0] = heros.getX();
+        
         lastPosition[1] = heros.getY();
         
 
