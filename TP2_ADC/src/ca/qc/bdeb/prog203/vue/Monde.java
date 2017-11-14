@@ -120,16 +120,16 @@ public class Monde extends JPanel {
         }
 
         if (heros.getX() - heros.getMaxVitesse() <= 0) {
-            heros.setLocation(lastPosition[0], lastPosition[1]);
+            heros.setLocation(lastPosition[0], heros.getY());
         }
         if (heros.getY() + heros.getHeight() + heros.getMaxVitesse() >= this.getHeight()) {
-            heros.setLocation(lastPosition[0], lastPosition[1]);
+            heros.setLocation(heros.getX(), lastPosition[1]);
         }
         if (heros.getY() - heros.getMaxVitesse() <= 0) {
-            heros.setLocation(lastPosition[0], lastPosition[1]);
+            heros.setLocation(heros.getX(), lastPosition[1]);
         }
         if (heros.getX() + heros.getWidth() + heros.getMaxVitesse() >= this.getWidth()) {
-            heros.setLocation(lastPosition[0], lastPosition[1]);
+            heros.setLocation(lastPosition[0], heros.getY());
         }
         lastPosition[0] = heros.getX();
         lastPosition[1] = heros.getY();
