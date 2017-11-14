@@ -58,8 +58,7 @@ public class Monde extends JPanel {
         public void run() {
             while (true) {
                 majJeu();
-                lastPosition[0] = heros.getX();
-                lastPosition[1] = heros.getY();
+                
                 try {
                     Thread.sleep(15);
                 } catch (InterruptedException ex) {
@@ -132,7 +131,8 @@ public class Monde extends JPanel {
         if (heros.getX() + heros.getWidth() + heros.getMaxVitesse() >= this.getWidth()) {
             heros.setLocation(lastPosition[0], lastPosition[1]);
         }
-
+        lastPosition[0] = heros.getX();
+        lastPosition[1] = heros.getY();
         
 
         if (listeKeyCodes.contains(KeyEvent.VK_SPACE)) {
