@@ -104,20 +104,6 @@ public class Monde extends JPanel {
             heros.setDirection(Personnages.Direction.DROITE);
             heros.setLocation(heros.getX() + heros.getMaxVitesse(), heros.getY());
         }
-
-        for (Obstacles obstacle : obstacles) {
-            if (heros.getBounds().intersects(obstacle.getBounds())) {
-                heros.setLocation(lastPosition.x, heros.getY());
-            }
-        }
-        if (heros.getX() - heros.getMaxVitesse() <= 0) {
-            heros.setLocation(lastPosition.x, heros.getY());
-        }
-        if (heros.getX() + heros.getWidth() + heros.getMaxVitesse() >= this.getWidth()) {
-            heros.setLocation(lastPosition.x, heros.getY());
-        }
-        lastPosition.x = heros.getX();
-
         if (listeKeyCodes.contains(KeyEvent.VK_S)) {
             heros.setDirection(Personnages.Direction.BAS);
             heros.setLocation(heros.getX(), heros.getY()
@@ -127,12 +113,28 @@ public class Monde extends JPanel {
             heros.setDirection(Personnages.Direction.HAUT);
             heros.setLocation(heros.getX(), heros.getY() - heros.getMaxVitesse());
         }
+
         for (Obstacles obstacle : obstacles) {
             if (heros.getBounds().intersects(obstacle.getBounds())) {
-                heros.setLocation(heros.getX(), lastPosition.y);
+                System.out.println(obstacle.getY() +" et "+heros.getY());
+                if ((listeKeyCodes.contains(KeyEvent.VK_W) && obstacle.getY() < heros.getY()) ||
+                        (listeKeyCodes.contains(KeyEvent.VK_S) && obstacle.getY() > heros.getY())) {
+                    heros.setLocation(heros.getX(), lastPosition.y);
+                }
+
+                if ((listeKeyCodes.contains(KeyEvent.VK_A)&& obstacle.getX() < heros.getX()) ||
+                        (listeKeyCodes.contains(KeyEvent.VK_D)&& obstacle.getX() > heros.getX())) {
+                    heros.setLocation(lastPosition.x, heros.getY());
+                }
+
             }
         }
-
+        if (heros.getX() - heros.getMaxVitesse() <= 0) {
+            heros.setLocation(lastPosition.x, heros.getY());
+        }
+        if (heros.getX() + heros.getWidth() + heros.getMaxVitesse() >= this.getWidth()) {
+            heros.setLocation(lastPosition.x, heros.getY());
+        }
         if (heros.getY() + heros.getHeight() + heros.getMaxVitesse() >= this.getHeight()) {
             heros.setLocation(heros.getX(), lastPosition.y);
         }
@@ -140,7 +142,7 @@ public class Monde extends JPanel {
             heros.setLocation(heros.getX(), lastPosition.y);
         }
 
-        lastPosition.y = heros.getY();
+        lastPosition = heros.getLocation();
 
         if (listeKeyCodes.contains(KeyEvent.VK_SPACE)) {
             if (!tirer.isRunning()) {
