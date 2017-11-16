@@ -37,6 +37,14 @@ public abstract class Projectiles extends JComponent {
     public void setDeltaY(int deltaY) {
         this.deltaY = deltaY;
     }
+
+    public int getDeltaX() {
+        return deltaX;
+    }
+
+    public int getDeltaY() {
+        return deltaY;
+    }
     
 
     public void bouger() {
