@@ -14,6 +14,7 @@ import ca.qc.bdeb.prog203.vue.elements.Personnages;
 import ca.qc.bdeb.prog203.vue.elements.Projectiles;
 import ca.qc.bdeb.prog203.vue.elements.Roche;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -39,26 +40,19 @@ public class Monde extends JPanel {
     private Heros heros;
     private final int tailleImageGazon = 32;
     private ArrayList<Integer> listeKeyCodes = new ArrayList();
+    private ArrayList<Projectiles> projectileASupprimer = new ArrayList();
 
     private ArrayList<Projectiles> projectiles = new ArrayList<Projectiles>();
     private ArrayList<Obstacles> obstacles = new ArrayList<Obstacles>();
-    private int[] lastPosition = new int[2];
-
-    private Timer tirer = new javax.swing.Timer(250, new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent ae) {
-            tirer();
-        }
-
-    });
-    ;
+    private Point lastPosition = new Point();
+    public static int DELAIS_TIR = 7;
+    private int cooldownTir = 0;
 
     private Thread thread = new Thread() {
         @Override
         public void run() {
             while (true) {
                 majJeu();
-
                 try {
                     Thread.sleep(15);
                 } catch (InterruptedException ex) {
@@ -75,7 +69,6 @@ public class Monde extends JPanel {
         setLayout(null);
         typeProjectile = typeProjectile.LASER;
         init();
-        tirer.setInitialDelay(0);
         nouvellePartie();
 
     }
@@ -93,6 +86,7 @@ public class Monde extends JPanel {
     }
 
     private void majJeu() {
+        //Si le héros se déplace en largeur
         if (listeKeyCodes.contains(KeyEvent.VK_A)) {
             heros.setDirection(Personnages.Direction.GAUCHE);
             heros.setLocation(heros.getX() - heros.getMaxVitesse(), heros.getY());
@@ -101,25 +95,23 @@ public class Monde extends JPanel {
             heros.setDirection(Personnages.Direction.DROITE);
             heros.setLocation(heros.getX() + heros.getMaxVitesse(), heros.getY());
         }
-        
+
         for (Obstacles obstacle : obstacles) {
             if (heros.getBounds().intersects(obstacle.getBounds())) {
-                heros.setLocation(lastPosition[0], heros.getY());
+                heros.setLocation(lastPosition.x, heros.getY());
             }
         }
         if (heros.getX() - heros.getMaxVitesse() <= 0) {
-            heros.setLocation(lastPosition[0], heros.getY());
+            heros.setLocation(lastPosition.x, heros.getY());
         }
         if (heros.getX() + heros.getWidth() + heros.getMaxVitesse() >= this.getWidth()) {
-            heros.setLocation(lastPosition[0], heros.getY());
+            heros.setLocation(lastPosition.x, heros.getY());
         }
-        lastPosition[0] = heros.getX();
-        
-        
+
+        //Si le héros se déplace en hauteur
         if (listeKeyCodes.contains(KeyEvent.VK_S)) {
             heros.setDirection(Personnages.Direction.BAS);
-            heros.setLocation(heros.getX(), heros.getY()
-                    + heros.getMaxVitesse());
+            heros.setLocation(heros.getX(), heros.getY() + heros.getMaxVitesse());
         }
         if (listeKeyCodes.contains(KeyEvent.VK_W)) {
             heros.setDirection(Personnages.Direction.HAUT);
@@ -127,55 +119,59 @@ public class Monde extends JPanel {
         }
         for (Obstacles obstacle : obstacles) {
             if (heros.getBounds().intersects(obstacle.getBounds())) {
-                heros.setLocation(heros.getX() ,lastPosition[1]);
+                heros.setLocation(heros.getX(), lastPosition.y);
             }
         }
-        
         if (heros.getY() + heros.getHeight() + heros.getMaxVitesse() >= this.getHeight()) {
-            heros.setLocation(heros.getX(), lastPosition[1]);
+            heros.setLocation(heros.getX(), lastPosition.y);
         }
         if (heros.getY() - heros.getMaxVitesse() <= 0) {
-            heros.setLocation(heros.getX(), lastPosition[1]);
+            heros.setLocation(heros.getX(), lastPosition.y);
         }
-        
-        lastPosition[1] = heros.getY();
-        
 
         if (listeKeyCodes.contains(KeyEvent.VK_SPACE)) {
-            if (!tirer.isRunning()) {
-                tirer.start();
+            if (cooldownTir == 0) {
+                tirer();
+                cooldownTir = DELAIS_TIR;
             }
-        } else {
-            tirer.stop();
         }
-        
-        ArrayList<Projectiles> eraseProjectile = new ArrayList();
-        
+
         for (Projectiles projectile : projectiles) {
             projectile.bouger();
-            
-            
-            //colission avec la fenetre
-            if ( (projectile.getDeltaX() < 0 && projectile.getX() +projectile.getWidth() <= 0)|| (projectile.getDeltaX() > 0 && projectile.getX() >= this.getWidth()) || (projectile.getDeltaY() < 0 && projectile.getY() + projectile.getHeight() <= 0) || (projectile.getDeltaY() > 0 && projectile.getY() >= this.getHeight()) ){
-                eraseProjectile.add(projectile);
-            }
-            
-            for (Obstacles obstacle: obstacles){
-                if (projectile.getBounds().intersects(obstacle.getBounds())){
-                    eraseProjectile.add(projectile);
-                }
-            }
-            
-            //faire collision avec les obstacles
-        }
-        for (Projectiles projectile: eraseProjectile){
-            projectiles.remove(projectile);
-            this.remove(projectile);
-        }
-        eraseProjectile.clear();
-        
-        
 
+            //colission avec la fenetre
+            loop:
+            if (getBounds().contains(projectile.getBounds())) {
+
+                for (Obstacles obstacle : obstacles) {
+                    if (projectile.getBounds().intersects(obstacle.getBounds())) {
+                        projectileASupprimer.add(projectile);
+                        break loop; //Si le projectile touche à un obstacle, on arrete de verifier si il touche à un obstacle
+                    }
+                }
+                projectile.bouger(); //Arrive ici seulement si le projectile est dans le cadre et il ne touche a rien
+            } else {
+                projectileASupprimer.add(projectile);
+
+            }
+
+        }
+
+        //Baisse le cooldown si il est superieur a 0
+        if (cooldownTir > 0) {
+            cooldownTir--;
+        }
+        //Enlève les projectiles à supprimer
+
+        for (Projectiles projectile : projectileASupprimer) {
+            projectiles.remove(projectile);
+            remove(projectile);
+            repaint();
+        }
+
+        projectileASupprimer.clear();
+
+        lastPosition = heros.getLocation();
     }
 
     private void tirerLaser() {
@@ -230,8 +226,7 @@ public class Monde extends JPanel {
         //Ajout du heros au centre
         add(heros, 0);
         heros.setLocation(8 * tailleImageGazon - 11, 7 * tailleImageGazon - 25);
-        lastPosition[0] = heros.getX();
-        lastPosition[1] = heros.getY();
+        lastPosition = heros.getLocation();
         //Disposition des roches
         for (int i = 0; i < 14; i++) {
             for (int j = 0; j < 16; j++) {
