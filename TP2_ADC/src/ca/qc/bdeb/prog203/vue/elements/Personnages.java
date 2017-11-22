@@ -26,7 +26,8 @@ public abstract class Personnages extends JComponent {
     protected Image imageFace, imageDos, imageDroite, imageGauche;
     protected int pointsDeVie;
     protected Direction direction = Direction.DROITE; //Direction par default
-
+    protected int[] lastPosition = new int[2];
+    
     public Personnages(int pointsDeVie, Image imageFace, Image imageDos, Image imageDroite, Image imageGauche, int largeur, int hauteur, int maxVitesse) {
         this.maxVitesse = maxVitesse;
         this.imageFace = imageFace;
@@ -54,6 +55,14 @@ public abstract class Personnages extends JComponent {
 
     public Direction getDirection() {
         return direction;
+    }
+
+    public int[] getLastPosition() {
+        return lastPosition;
+    }
+
+    public void setLastPosition(int[] lastPosition) {
+        this.lastPosition = lastPosition;
     }
     
 

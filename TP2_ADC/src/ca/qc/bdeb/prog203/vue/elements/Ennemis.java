@@ -6,6 +6,7 @@
 package ca.qc.bdeb.prog203.vue.elements;
 
 import java.awt.Image;
+import java.util.Random;
 
 /**
  *
@@ -23,7 +24,7 @@ public abstract class Ennemis extends Personnages {
         super(pointsDeVie, imageFace, imageDos, imageDroite, imageGauche, LARGEUR, HAUTEUR, vitesse);
 
         this.points = points;
-
     }
+    
 
 }
