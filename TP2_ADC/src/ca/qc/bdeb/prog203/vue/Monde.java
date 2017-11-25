@@ -49,6 +49,7 @@ public class Monde extends JPanel {
     private ArrayList<Obstacles> obstacles = new ArrayList<Obstacles>();
     private ArrayList<Ennemis> ennemis = new ArrayList<Ennemis>();
     private ArrayList<Ennemis> enleverEnnemis = new ArrayList<Ennemis>();
+    ArrayList<Projectiles> eraseProjectile = new ArrayList();
     
     private final Timer tirer = new javax.swing.Timer(250, new ActionListener() {
         @Override
@@ -74,8 +75,26 @@ public class Monde extends JPanel {
                     break;
             }
             
+            int[] pos = null;
+            switch(r.nextInt(4)){
+                case 0:
+                    pos = new int[]{-ennemis.get(ennemis.size()-1).getWidth(),((int)Monde.this.getHeight()/2) - ((int) ennemis.get(ennemis.size()-1).getHeight()/2)};
+                    break;
+                case 1:
+                    pos = new int[]{ennemis.get(ennemis.size()-1).getWidth() + Monde.this.getWidth(),((int)Monde.this.getHeight()/2) - ((int) ennemis.get(ennemis.size()-1).getHeight()/2)};
+                    break;
+                case 2:
+                    pos = new int[]{((int) Monde.this.getWidth()/2) - ((int)ennemis.get(ennemis.size()-1).getWidth()/2) , -ennemis.get(ennemis.size()-1).getHeight() };
+                    break;
+                case 3:
+                    pos = new int[]{((int) Monde.this.getWidth()/2) - ((int)ennemis.get(ennemis.size()-1).getWidth()/2) , Monde.this.getHeight()+ennemis.get(ennemis.size()-1).getHeight() };
+                    break;
             
-            ennemis.get(ennemis.size()-1).setLocation(200, 200);
+            }
+            
+            
+            
+            ennemis.get(ennemis.size()-1).setLocation(pos[0], pos[1]);
             Monde.this.add(ennemis.get(ennemis.size()-1),0);
         }
     });
@@ -193,11 +212,22 @@ public class Monde extends JPanel {
         }
         ennemi.setLastPosition(new int[]{ennemi.getX(), ennemi.getY()});
         
-        
-        if (ennemi.getBounds().intersects(heros.getBounds())){
-            enleverEnnemis.add(ennemi);
+        boolean gone = false;
+        for (Projectiles projectile: projectiles){
+            if(ennemi.getBounds().intersects(projectile.getBounds()) && !gone){
+                gone = true;
+                eraseProjectile.add(projectile);
+            }
         }
         
+        
+        if (ennemi.getBounds().intersects(heros.getBounds()) && !gone){
+            gone = true;
+        }
+        
+        if (gone){
+            enleverEnnemis.add(ennemi);
+        }
         
         
         
@@ -224,7 +254,7 @@ public class Monde extends JPanel {
             tirer.stop();
         }
         
-        ArrayList<Projectiles> eraseProjectile = new ArrayList();
+        
         
         for (Projectiles projectile : projectiles) {
             projectile.bouger();
