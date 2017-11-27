@@ -7,6 +7,7 @@ package ca.qc.bdeb.prog203.controlleur;
 
 import ca.qc.bdeb.prog203.modele.ModeleADC;
 import ca.qc.bdeb.prog203.vue.FenetreADC;
+import ca.qc.bdeb.prog203.vue.elements.Ennemis;
 
 /**
  *
@@ -15,9 +16,23 @@ import ca.qc.bdeb.prog203.vue.FenetreADC;
 public class ControlleurADC {
 
     private final ModeleADC modeleADC = new ModeleADC();
-    private final FenetreADC fenetreADC = new FenetreADC(modeleADC);
+    private final FenetreADC fenetreADC = new FenetreADC(this,modeleADC);
 
     public ControlleurADC() {
     }
-
+    
+    public boolean finDePartie(int vie){
+        if (vie >= 0){
+            return true;
+        }
+        return false;
+    }
+    
+    public void heroToucher(){
+        modeleADC.setPointsVie(modeleADC.getPointsVie() - 1);
+        finDePartie(modeleADC.getPointsVie());
+    }
+    public void ennemiTuer(Ennemis ennemi){
+        
+    }
 }

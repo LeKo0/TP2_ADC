@@ -5,8 +5,7 @@
  */
 package ca.qc.bdeb.prog203;
 
-import ca.qc.bdeb.prog203.modele.ModeleADC;
-import ca.qc.bdeb.prog203.vue.FenetreADC;
+import ca.qc.bdeb.prog203.controlleur.ControlleurADC;
 
 /**
  *
@@ -18,9 +17,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
-        ModeleADC modele = new ModeleADC();
-        FenetreADC fenetre = new FenetreADC(modele);
+        ControlleurADC controlleur = new ControlleurADC();
     }
     
 }

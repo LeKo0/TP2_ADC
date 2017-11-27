@@ -5,14 +5,18 @@
  */
 package ca.qc.bdeb.prog203.vue;
 
+import ca.qc.bdeb.prog203.controlleur.ControlleurADC;
 import ca.qc.bdeb.prog203.modele.ModeleADC;
 import ca.qc.bdeb.prog203.vue.elements.Roche;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -25,15 +29,17 @@ import javax.swing.JPanel;
  *
  * @author 1666876
  */
-public class FenetreADC extends JFrame {
+public class FenetreADC extends JFrame implements Observer{
 
     private JMenuBar mnuBar;
     private JMenu mnuFichier, mnuHelp;
     private JMenuItem mnuNouvellePartie, mnuQuitter, mnuAide, mnuAPropos;
     private Monde pnlMonde;
     private JPanel pnlInfo;
+    private ControlleurADC controlleur;
 
-    public FenetreADC(ModeleADC modele) {
+    public FenetreADC(ControlleurADC controlleur, ModeleADC modele) {
+        this.controlleur = controlleur;
         setTitle("Tantacule Mauve: La contre-attaque");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -48,6 +54,13 @@ public class FenetreADC extends JFrame {
         pnlMonde.setFocusable(true);
     }
 
+    @Override//on doit update le chit des vies (comme ce qui est sous le jeu) ;)
+    public void update(Observable o, Object arg) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    
     /**
      * La méthode sera utilisé pour initialiser le menu
      */
@@ -93,13 +106,15 @@ public class FenetreADC extends JFrame {
      * dire les personnages, les buissons, etc)
      */
     private void initMonde() {
-        pnlMonde = new Monde();
+        pnlMonde = new Monde(controlleur);
         add(pnlMonde);
 
     }
     private void nouvellePartie(){
         
     }
+
+    
     
 
     private void creerEvenement() {

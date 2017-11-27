@@ -5,6 +5,7 @@
  */
 package ca.qc.bdeb.prog203.vue;
 
+import ca.qc.bdeb.prog203.controlleur.ControlleurADC;
 import ca.qc.bdeb.prog203.vue.elements.Balle;
 import ca.qc.bdeb.prog203.vue.elements.Buisson;
 import ca.qc.bdeb.prog203.vue.elements.Ennemis;
@@ -49,7 +50,8 @@ public class Monde extends JPanel {
     private ArrayList<Obstacles> obstacles = new ArrayList<Obstacles>();
     private ArrayList<Ennemis> ennemis = new ArrayList<Ennemis>();
     private ArrayList<Ennemis> enleverEnnemis = new ArrayList<Ennemis>();
-    ArrayList<Projectiles> eraseProjectile = new ArrayList();
+    private ArrayList<Projectiles> eraseProjectile = new ArrayList();
+    private ControlleurADC controlleur;
     
     private final Timer tirer = new javax.swing.Timer(250, new ActionListener() {
         @Override
@@ -116,7 +118,8 @@ public class Monde extends JPanel {
 
     };
 
-    public Monde() {
+    public Monde(ControlleurADC controlleur) {
+        this.controlleur = controlleur;
         setPreferredSize(new Dimension(16 * tailleImageGazon, 14 * tailleImageGazon));
         setLayout(null);
         typeProjectile = typeProjectile.LASER;
@@ -222,6 +225,7 @@ public class Monde extends JPanel {
         
         
         if (ennemi.getBounds().intersects(heros.getBounds()) && !gone){
+            controlleur.heroToucher();
             gone = true;
         }
         
