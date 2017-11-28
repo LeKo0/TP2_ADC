@@ -16,7 +16,7 @@ public class TVert extends Ennemis {
 
     public TVert() {
 
-        super(1, 1, 2, Toolkit.getDefaultToolkit().getImage("images/greenfront.gif"), Toolkit.getDefaultToolkit().getImage("images/greenback.gif"),
+        super(1, 1, 1, Toolkit.getDefaultToolkit().getImage("images/greenfront.gif"), Toolkit.getDefaultToolkit().getImage("images/greenback.gif"),
                 Toolkit.getDefaultToolkit().getImage("images/greenfront.gif"), Toolkit.getDefaultToolkit().getImage("images/greenback.gif"));
     }
 

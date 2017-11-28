@@ -11,7 +11,7 @@ import java.awt.Toolkit;
 public class TMauve extends Ennemis {
 
     public TMauve() {
-        super(2, 3, 2, Toolkit.getDefaultToolkit().getImage("images/purplefront.gif"), Toolkit.getDefaultToolkit().getImage("images/purpleback.gif"),
+        super(2, 3, 1, Toolkit.getDefaultToolkit().getImage("images/purplefront.gif"), Toolkit.getDefaultToolkit().getImage("images/purpleback.gif"),
                 Toolkit.getDefaultToolkit().getImage("images/purplefront.gif"), Toolkit.getDefaultToolkit().getImage("images/purpleback.gif"));
     }
 

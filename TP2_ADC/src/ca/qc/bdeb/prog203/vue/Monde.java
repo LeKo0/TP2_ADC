@@ -295,10 +295,20 @@ public class Monde extends JPanel {
                     ennemi.setLocation(ennemi.getLastPosition().x, ennemi.getY());
                 }
             }
+            for (Ennemis autreEnnemi : listeEnnemis) {
+                if (!ennemi.equals(autreEnnemi) && ennemi.getBounds().intersects(autreEnnemi.getBounds())) {
+                    ennemi.setLocation(ennemi.getLastPosition().x, ennemi.getY());
+                }
+            }
 
             ennemi.setLocation(ennemi.getX(), ennemi.getY() + vitesseY);
             for (Obstacles obstacle : listeObstacles) {
                 if (ennemi.getBounds().intersects(obstacle.getBounds())) {
+                    ennemi.setLocation(ennemi.getX(), ennemi.getLastPosition().y);
+                }
+            }
+            for (Ennemis autreEnnemi : listeEnnemis) {
+                if (!ennemi.equals(autreEnnemi) && ennemi.getBounds().intersects(autreEnnemi.getBounds())) {
                     ennemi.setLocation(ennemi.getX(), ennemi.getLastPosition().y);
                 }
             }

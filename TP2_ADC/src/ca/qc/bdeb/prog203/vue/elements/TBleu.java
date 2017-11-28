@@ -12,7 +12,7 @@ public class TBleu extends Ennemis {
 
     public TBleu() {
 
-        super(1, 2, 3, Toolkit.getDefaultToolkit().getImage("images/bleufront.gif"), Toolkit.getDefaultToolkit().getImage("images/bleuback.gif"),
+        super(1, 2, 2, Toolkit.getDefaultToolkit().getImage("images/bleufront.gif"), Toolkit.getDefaultToolkit().getImage("images/bleuback.gif"),
                 Toolkit.getDefaultToolkit().getImage("images/bleufront.gif"), Toolkit.getDefaultToolkit().getImage("images/bleuback.gif"));
     }
 
