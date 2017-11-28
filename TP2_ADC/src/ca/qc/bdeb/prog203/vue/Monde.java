@@ -24,10 +24,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.TimerTask;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
@@ -63,46 +61,45 @@ public class Monde extends JPanel {
         }
 
     });
-    private final Timer spawm = new javax.swing.Timer(3000, new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            Point position = null;
-            
-            switch (random.nextInt(3)) {
-                case 0:
-                    ennemis.add(new TBleu());
-                    break;
-                case 1:
-                    ennemis.add(new TMauve());
-                    break;
-                case 2:
-                    ennemis.add(new TVert());
-                    break;
-            }
-
-            switch (random.nextInt(4)) {
-                case 0:
-                    position.x = -ennemis.get(ennemis.size() - 1).getWidth();
-                    position.y = ((int) Monde.this.getHeight() / 2) - ((int) ennemis.get(ennemis.size() - 1).getHeight() / 2);
-                    break;
-                case 1:
-                    position.x = ennemis.get(ennemis.size() - 1).getWidth() + Monde.this.getWidth();
-                    position.y = ((int) Monde.this.getHeight() / 2) - ((int) ennemis.get(ennemis.size() - 1).getHeight() / 2);
-                    break;
-                case 2:
-                    position.x = ((int) Monde.this.getWidth() / 2) - ((int) ennemis.get(ennemis.size() - 1).getWidth() / 2);
-                    position.y = -ennemis.get(ennemis.size() - 1).getHeight();
-                    break;
-                case 3:
-                    position.x = ((int) Monde.this.getWidth() / 2) - ((int) ennemis.get(ennemis.size() - 1).getWidth() / 2);
-                    position.y = Monde.this.getHeight() + ennemis.get(ennemis.size() - 1).getHeight();
-
-            }
-
-            ennemis.get(ennemis.size() - 1).setLocation(position);
-            Monde.this.add(ennemis.get(ennemis.size() - 1), 0);
-        }
-    });
+//   private final Timer spawm = new javax.swing.Timer(3000, new ActionListener() {
+//        @Override
+//        public void actionPerformed(ActionEvent e) {
+//            Point position = new Point(0, 0);
+//
+//            switch (random.nextInt(3)) {
+//                case 0:
+//                    ennemis.add(new TBleu());
+//                    break;
+//                case 1:
+//                    ennemis.add(new TMauve());
+//                    break;
+//                case 2:
+//                    ennemis.add(new TVert());
+//                    break;
+//            }
+//            switch (random.nextInt(4)) {
+//                case 0:
+//                    position.x = -Ennemis.LARGEUR;
+//                    position.y = ((int) Monde.this.getHeight() / 2) - ((int) Ennemis.HAUTEUR / 2);
+//                    break;
+//                case 1:
+//                    position.x = Ennemis.LARGEUR + Monde.this.getWidth();
+//                    position.y = ((int) Monde.this.getHeight() / 2) - ((int) Ennemis.HAUTEUR / 2);
+//                    break;
+//                case 2:
+//                    position.x = ((int) Monde.this.getWidth() / 2) - ((int) Ennemis.LARGEUR / 2);
+//                    position.y = -Ennemis.HAUTEUR;
+//                    break;
+//                case 3:
+//                    position.x = ((int) Monde.this.getWidth() / 2) - ((int) Ennemis.LARGEUR / 2);
+//                    position.y = Monde.this.getHeight() + Ennemis.HAUTEUR;
+//
+//            }
+//
+//            ennemis.get(ennemis.size() - 1).setLocation(position);
+//            Monde.this.add(ennemis.get(ennemis.size() - 1), 0);
+//        }
+//    });
 
     private Thread thread = new Thread() {
         @Override
@@ -125,7 +122,7 @@ public class Monde extends JPanel {
         this.controlleur = controlleur;
         setPreferredSize(new Dimension(16 * tailleImageGazon, 14 * tailleImageGazon));
         setLayout(null);
-        typeProjectile = typeProjectile.LASER;
+        typeProjectile = typeProjectile.BALLE;
         init();
         tirer.setInitialDelay(0);
         nouvellePartie();
@@ -145,51 +142,41 @@ public class Monde extends JPanel {
     }
 
     private void bougerHero() {
-        if (listeKeyCodes.contains(KeyEvent.VK_A)) {
-            heros.setDirection(Personnages.Direction.GAUCHE);
-            heros.setLocation(heros.getX() - heros.getVitesse(), heros.getY());
-        }
-        if (listeKeyCodes.contains(KeyEvent.VK_D)) {
-            heros.setDirection(Personnages.Direction.DROITE);
-            heros.setLocation(heros.getX() + heros.getVitesse(), heros.getY());
-        }
 
-        for (Obstacles obstacle : obstacles) {
-            if (heros.getBounds().intersects(obstacle.getBounds())) {
-                heros.setLocation(heros.getLastPosition().x, heros.getY());
+        if (!listeKeyCodes.isEmpty()) {
+
+            if (listeKeyCodes.contains(KeyEvent.VK_S)) {
+                heros.setDirection(Personnages.Direction.BAS);
+                heros.setDeltaY(1);
             }
-        }
-        if (heros.getX() - heros.getVitesse() <= 0) {
-            heros.setLocation(heros.getLastPosition().x, heros.getY());
-        }
-        if (heros.getX() + heros.getWidth() + heros.getVitesse() >= this.getWidth()) {
-            heros.setLocation(heros.getLastPosition().x, heros.getY());
-        }
-
-        heros.setLastPosition(heros.getLocation());
-
-        if (listeKeyCodes.contains(KeyEvent.VK_S)) {
-            heros.setDirection(Personnages.Direction.BAS);
-            heros.setLocation(heros.getX(), heros.getY()
-                    + heros.getVitesse());
-        }
-        if (listeKeyCodes.contains(KeyEvent.VK_W)) {
-            heros.setDirection(Personnages.Direction.HAUT);
-            heros.setLocation(heros.getX(), heros.getY() - heros.getVitesse());
-        }
-        for (Obstacles obstacle : obstacles) {
-            if (heros.getBounds().intersects(obstacle.getBounds())) {
-                heros.setLocation(heros.getX(), heros.getLastPosition().y);
+            if (listeKeyCodes.contains(KeyEvent.VK_W)) {
+                heros.setDirection(Personnages.Direction.HAUT);
+                heros.setDeltaY(-1);
             }
-        }
+            if (listeKeyCodes.contains(KeyEvent.VK_A)) {
+                heros.setDirection(Personnages.Direction.GAUCHE);
+                heros.setDeltaX(-1);
+            }
+            if (listeKeyCodes.contains(KeyEvent.VK_D)) {
+                heros.setDirection(Personnages.Direction.DROITE);
+                heros.setDeltaX(1);
+            }
+            heros.bouger();
+            if (!this.getBounds().contains(heros.getBounds())) {
+                heros.setDeltaX(0);
+                heros.setDeltaY(0);
+            }
+            for (Obstacles obstacle : obstacles) {
+                if (heros.getBounds().intersects(obstacle.getBounds())) {
+                    heros.setLocation(heros.getLastPosition());
+                }
+            }
 
-        if (heros.getY() + heros.getHeight() + heros.getVitesse() >= this.getHeight()) {
-            heros.setLocation(heros.getX(), heros.getLastPosition().y);
+            
+
+            heros.setLastPosition(heros.getLocation());
+            heros.bouger();
         }
-        if (heros.getY() - heros.getVitesse() <= 0) {
-            heros.setLocation(heros.getX(), heros.getLastPosition().y);
-        }
-        heros.setLastPosition(heros.getLocation());
 
     }
 
@@ -298,7 +285,7 @@ public class Monde extends JPanel {
             default: //case GAUCHE:
                 laserTemp = new Laser(-1, 0);
         }
-        laserTemp.setLocation(heros.getX(), heros.getY());
+        laserTemp.setLocation(heros.getLocation());
         projectiles.add(laserTemp);
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -310,12 +297,50 @@ public class Monde extends JPanel {
 
     private void tirerBalle() {
 
+        Balle[] ballesTemp = new Balle[3];
+
+        switch (heros.getDirection()) {
+            case HAUT:
+                ballesTemp[0] = new Balle(-1, -1);
+                ballesTemp[1] = new Balle(0, -1);
+                ballesTemp[2] = new Balle(1, -1);
+                break;
+            case BAS:
+                ballesTemp[0] = new Balle(1, 1);
+                ballesTemp[1] = new Balle(0, 1);
+                ballesTemp[2] = new Balle(-1, 1);
+                break;
+            case DROITE:
+                ballesTemp[0] = new Balle(1, -1);
+                ballesTemp[1] = new Balle(1, 0);
+                ballesTemp[2] = new Balle(1, 1);
+                break;
+            default: //case GAUCHE:
+                ballesTemp[2] = new Balle(-1, 1);
+                ballesTemp[0] = new Balle(-1, -1);
+                ballesTemp[1] = new Balle(-1, 0);
+
+        }
+
+        for (Balle balle : ballesTemp) {
+            balle.setLocation(heros.getLocation());
+            projectiles.add(balle);
+        }
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                add(ballesTemp[0], 0);
+                add(ballesTemp[1], 0);
+                add(ballesTemp[2], 0);
+
+            }
+        });
+
     }
 
     private void nouvellePartie() {
         creerEvenement();
         thread.start();
-        spawm.start();
+        //spawm.start();
 
     }
 
@@ -384,3 +409,46 @@ public class Monde extends JPanel {
     }
 
 }
+// if (listeKeyCodes.contains(KeyEvent.VK_A)) {
+//            heros.setDirection(Personnages.Direction.GAUCHE);
+//            heros.setDeltaX(-1);
+//        }
+//        if (listeKeyCodes.contains(KeyEvent.VK_D)) {
+//            heros.setDirection(Personnages.Direction.DROITE);
+//            heros.setDeltaX(1);
+//        }
+//
+//        for (Obstacles obstacle : obstacles) {
+//            if (heros.getBounds().intersects(obstacle.getBounds())) {
+//                heros.setLocation(heros.getLastPosition().x, heros.getY());
+//            }
+//        }
+//        if (heros.getX() - heros.getVitesse() <= 0) {
+//            heros.setLocation(heros.getLastPosition().x, heros.getY());
+//        }
+//        if (heros.getX() + heros.getWidth() + heros.getVitesse() >= this.getWidth()) {
+//            heros.setLocation(heros.getLastPosition().x, heros.getY());
+//        }
+//
+//        heros.setLastPosition(heros.getLocation());
+//        if (listeKeyCodes.contains(KeyEvent.VK_S)) {
+//            heros.setDirection(Personnages.Direction.BAS);
+//            heros.setDeltaY(-1);
+//        }
+//        if (listeKeyCodes.contains(KeyEvent.VK_W)) {
+//            heros.setDirection(Personnages.Direction.HAUT);
+//            heros.setDeltaY(1);
+//        }
+//        for (Obstacles obstacle : obstacles) {
+//            if (heros.getBounds().intersects(obstacle.getBounds())) {
+//                heros.setLocation(heros.getX(), heros.getLastPosition().y);
+//            }
+//        }
+//
+//        if (heros.getY() + heros.getHeight() + heros.getVitesse() >= this.getHeight()) {
+//            heros.setLocation(heros.getX(), heros.getLastPosition().y);
+//        }
+//        if (heros.getY() - heros.getVitesse() <= 0) {
+//            heros.setLocation(heros.getX(), heros.getLastPosition().y);
+//        }
+//        heros.setLastPosition(heros.getLocation());

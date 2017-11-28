@@ -18,16 +18,17 @@ import javax.swing.JComponent;
 public abstract class Personnages extends JComponent {
 
     public enum Direction {
+
         HAUT, BAS, DROITE, GAUCHE
     }
-    
-    
+
+    protected int deltaX, deltaY;
     protected final int vitesse;
     protected Image imageFace, imageDos, imageDroite, imageGauche;
     protected int pointsDeVie;
     protected Direction direction = Direction.DROITE; //Direction par default
     protected Point lastPosition = new Point();
-    
+
     public Personnages(int pointsDeVie, Image imageFace, Image imageDos, Image imageDroite, Image imageGauche, int largeur, int hauteur, int vitesse) {
         this.vitesse = vitesse;
         this.imageFace = imageFace;
@@ -35,7 +36,8 @@ public abstract class Personnages extends JComponent {
         this.imageDroite = imageDroite;
         this.imageGauche = imageGauche;
         this.pointsDeVie = pointsDeVie;
-        
+        deltaX = 0;
+        deltaY = 0;
 
         setSize(largeur, hauteur);
     }
@@ -47,9 +49,11 @@ public abstract class Personnages extends JComponent {
     public int getPointsDeVie() {
         return pointsDeVie;
     }
-    public int getVitesse(){
+
+    public int getVitesse() {
         return vitesse;
     }
+
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
@@ -65,12 +69,20 @@ public abstract class Personnages extends JComponent {
     public void setLastPosition(Point lastPosition) {
         this.lastPosition = lastPosition;
     }
-    
-   
 
-  
-    
-    
+    public void bouger() {
+        setLocation(getX() + deltaX * vitesse, getY() + deltaY * vitesse);
+        deltaX = 0;
+        deltaY = 0;
+    }
+
+    public void setDeltaX(int deltaX) {
+        this.deltaX = deltaX;
+    }
+
+    public void setDeltaY(int deltaY) {
+        this.deltaY = deltaY;
+    }
     
 
     @Override

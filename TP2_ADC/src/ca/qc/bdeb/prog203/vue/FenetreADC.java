@@ -7,12 +7,7 @@ package ca.qc.bdeb.prog203.vue;
 
 import ca.qc.bdeb.prog203.controlleur.ControlleurADC;
 import ca.qc.bdeb.prog203.modele.ModeleADC;
-import ca.qc.bdeb.prog203.vue.elements.Roche;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
