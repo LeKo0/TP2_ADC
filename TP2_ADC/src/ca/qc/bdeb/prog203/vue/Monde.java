@@ -20,10 +20,12 @@ import ca.qc.bdeb.prog203.vue.elements.TMauve;
 import ca.qc.bdeb.prog203.vue.elements.TVert;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JPanel;
@@ -143,40 +145,49 @@ public class Monde extends JPanel {
 
     private void bougerHero() {
 
-        if (!listeKeyCodes.isEmpty()) {
-
-            if (listeKeyCodes.contains(KeyEvent.VK_S)) {
-                heros.setDirection(Personnages.Direction.BAS);
-                heros.setDeltaY(1);
-            }
-            if (listeKeyCodes.contains(KeyEvent.VK_W)) {
-                heros.setDirection(Personnages.Direction.HAUT);
-                heros.setDeltaY(-1);
-            }
-            if (listeKeyCodes.contains(KeyEvent.VK_A)) {
-                heros.setDirection(Personnages.Direction.GAUCHE);
-                heros.setDeltaX(-1);
-            }
-            if (listeKeyCodes.contains(KeyEvent.VK_D)) {
-                heros.setDirection(Personnages.Direction.DROITE);
-                heros.setDeltaX(1);
-            }
-            heros.bouger();
-            if (!this.getBounds().contains(heros.getBounds())) {
-                heros.setDeltaX(0);
-                heros.setDeltaY(0);
-            }
-            for (Obstacles obstacle : obstacles) {
-                if (heros.getBounds().intersects(obstacle.getBounds())) {
-                    heros.setLocation(heros.getLastPosition());
-                }
-            }
-
-            
-
-            heros.setLastPosition(heros.getLocation());
-            heros.bouger();
+         if (listeKeyCodes.contains(KeyEvent.VK_A)) {
+            heros.setDirection(Personnages.Direction.GAUCHE);
+            heros.setLocation(heros.getX() - heros.getVitesse(), heros.getY());
         }
+        if (listeKeyCodes.contains(KeyEvent.VK_D)) {
+            heros.setDirection(Personnages.Direction.DROITE);
+            heros.setLocation(heros.getX() + heros.getVitesse(),heros.getY());
+        }
+
+        for (Obstacles obstacle : obstacles) {
+            if (heros.getBounds().intersects(obstacle.getBounds())) {
+                heros.setLocation(heros.getLastPosition().x, heros.getY());
+            }
+        }
+        if (heros.getX() - heros.getVitesse() <= 0) {
+            heros.setLocation(heros.getLastPosition().x, heros.getY());
+        }
+        if (heros.getX() + heros.getWidth() + heros.getVitesse() >= this.getWidth()) {
+            heros.setLocation(heros.getLastPosition().x, heros.getY());
+        }
+
+        heros.setLastPosition(heros.getLocation());
+        if (listeKeyCodes.contains(KeyEvent.VK_S)) {
+            heros.setDirection(Personnages.Direction.BAS);
+            heros.setLocation(heros.getX(),heros.getY() + heros.getVitesse());
+        }
+        if (listeKeyCodes.contains(KeyEvent.VK_W)) {
+            heros.setDirection(Personnages.Direction.HAUT);
+            heros.setLocation(heros.getX(),heros.getY() - heros.getVitesse());
+        }
+        for (Obstacles obstacle : obstacles) {
+            if (heros.getBounds().intersects(obstacle.getBounds())) {
+                heros.setLocation(heros.getX(), heros.getLastPosition().y);
+            }
+        }
+
+        if (heros.getY() + heros.getHeight() + heros.getVitesse() >= this.getHeight()) {
+            heros.setLocation(heros.getX(), heros.getLastPosition().y);
+        }
+        if (heros.getY() - heros.getVitesse() <= 0) {
+            heros.setLocation(heros.getX(), heros.getLastPosition().y);
+        }
+        heros.setLastPosition(heros.getLocation());
 
     }
 
@@ -409,46 +420,4 @@ public class Monde extends JPanel {
     }
 
 }
-// if (listeKeyCodes.contains(KeyEvent.VK_A)) {
-//            heros.setDirection(Personnages.Direction.GAUCHE);
-//            heros.setDeltaX(-1);
-//        }
-//        if (listeKeyCodes.contains(KeyEvent.VK_D)) {
-//            heros.setDirection(Personnages.Direction.DROITE);
-//            heros.setDeltaX(1);
-//        }
-//
-//        for (Obstacles obstacle : obstacles) {
-//            if (heros.getBounds().intersects(obstacle.getBounds())) {
-//                heros.setLocation(heros.getLastPosition().x, heros.getY());
-//            }
-//        }
-//        if (heros.getX() - heros.getVitesse() <= 0) {
-//            heros.setLocation(heros.getLastPosition().x, heros.getY());
-//        }
-//        if (heros.getX() + heros.getWidth() + heros.getVitesse() >= this.getWidth()) {
-//            heros.setLocation(heros.getLastPosition().x, heros.getY());
-//        }
-//
-//        heros.setLastPosition(heros.getLocation());
-//        if (listeKeyCodes.contains(KeyEvent.VK_S)) {
-//            heros.setDirection(Personnages.Direction.BAS);
-//            heros.setDeltaY(-1);
-//        }
-//        if (listeKeyCodes.contains(KeyEvent.VK_W)) {
-//            heros.setDirection(Personnages.Direction.HAUT);
-//            heros.setDeltaY(1);
-//        }
-//        for (Obstacles obstacle : obstacles) {
-//            if (heros.getBounds().intersects(obstacle.getBounds())) {
-//                heros.setLocation(heros.getX(), heros.getLastPosition().y);
-//            }
-//        }
-//
-//        if (heros.getY() + heros.getHeight() + heros.getVitesse() >= this.getHeight()) {
-//            heros.setLocation(heros.getX(), heros.getLastPosition().y);
-//        }
-//        if (heros.getY() - heros.getVitesse() <= 0) {
-//            heros.setLocation(heros.getX(), heros.getLastPosition().y);
-//        }
-//        heros.setLastPosition(heros.getLocation());
+
