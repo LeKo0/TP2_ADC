@@ -7,6 +7,7 @@ package ca.qc.bdeb.prog203.vue.elements;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 
 import javax.swing.JComponent;
 
@@ -21,20 +22,20 @@ public abstract class Personnages extends JComponent {
     }
     
     
-    
-    protected final int maxVitesse;
+    protected final int vitesse;
     protected Image imageFace, imageDos, imageDroite, imageGauche;
     protected int pointsDeVie;
     protected Direction direction = Direction.DROITE; //Direction par default
-    protected int[] lastPosition = new int[2];
+    protected Point lastPosition = new Point();
     
-    public Personnages(int pointsDeVie, Image imageFace, Image imageDos, Image imageDroite, Image imageGauche, int largeur, int hauteur, int maxVitesse) {
-        this.maxVitesse = maxVitesse;
+    public Personnages(int pointsDeVie, Image imageFace, Image imageDos, Image imageDroite, Image imageGauche, int largeur, int hauteur, int vitesse) {
+        this.vitesse = vitesse;
         this.imageFace = imageFace;
         this.imageDos = imageDos;
         this.imageDroite = imageDroite;
         this.imageGauche = imageGauche;
         this.pointsDeVie = pointsDeVie;
+        
 
         setSize(largeur, hauteur);
     }
@@ -46,8 +47,8 @@ public abstract class Personnages extends JComponent {
     public int getPointsDeVie() {
         return pointsDeVie;
     }
-    public int getMaxVitesse(){
-        return maxVitesse;
+    public int getVitesse(){
+        return vitesse;
     }
     public void setDirection(Direction direction) {
         this.direction = direction;
@@ -57,13 +58,19 @@ public abstract class Personnages extends JComponent {
         return direction;
     }
 
-    public int[] getLastPosition() {
+    public Point getLastPosition() {
         return lastPosition;
     }
 
-    public void setLastPosition(int[] lastPosition) {
+    public void setLastPosition(Point lastPosition) {
         this.lastPosition = lastPosition;
     }
+    
+   
+
+  
+    
+    
     
 
     @Override

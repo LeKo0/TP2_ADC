@@ -19,6 +19,7 @@ import ca.qc.bdeb.prog203.vue.elements.TBleu;
 import ca.qc.bdeb.prog203.vue.elements.TMauve;
 import ca.qc.bdeb.prog203.vue.elements.TVert;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -38,6 +39,7 @@ import javax.swing.Timer;
 public class Monde extends JPanel {
 
     private enum typeProjectile {
+
         LASER, BALLE
     }
 
@@ -52,7 +54,8 @@ public class Monde extends JPanel {
     private ArrayList<Ennemis> enleverEnnemis = new ArrayList<Ennemis>();
     private ArrayList<Projectiles> eraseProjectile = new ArrayList();
     private ControlleurADC controlleur;
-    
+    private Random random = new Random();
+
     private final Timer tirer = new javax.swing.Timer(250, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent ae) {
@@ -63,9 +66,9 @@ public class Monde extends JPanel {
     private final Timer spawm = new javax.swing.Timer(3000, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            Random r = new Random();
-            int choix = r.nextInt(3);
-            switch(choix){
+            Point position = null;
+            
+            switch (random.nextInt(3)) {
                 case 0:
                     ennemis.add(new TBleu());
                     break;
@@ -76,28 +79,28 @@ public class Monde extends JPanel {
                     ennemis.add(new TVert());
                     break;
             }
-            
-            int[] pos = null;
-            switch(r.nextInt(4)){
+
+            switch (random.nextInt(4)) {
                 case 0:
-                    pos = new int[]{-ennemis.get(ennemis.size()-1).getWidth(),((int)Monde.this.getHeight()/2) - ((int) ennemis.get(ennemis.size()-1).getHeight()/2)};
+                    position.x = -ennemis.get(ennemis.size() - 1).getWidth();
+                    position.y = ((int) Monde.this.getHeight() / 2) - ((int) ennemis.get(ennemis.size() - 1).getHeight() / 2);
                     break;
                 case 1:
-                    pos = new int[]{ennemis.get(ennemis.size()-1).getWidth() + Monde.this.getWidth(),((int)Monde.this.getHeight()/2) - ((int) ennemis.get(ennemis.size()-1).getHeight()/2)};
+                    position.x = ennemis.get(ennemis.size() - 1).getWidth() + Monde.this.getWidth();
+                    position.y = ((int) Monde.this.getHeight() / 2) - ((int) ennemis.get(ennemis.size() - 1).getHeight() / 2);
                     break;
                 case 2:
-                    pos = new int[]{((int) Monde.this.getWidth()/2) - ((int)ennemis.get(ennemis.size()-1).getWidth()/2) , -ennemis.get(ennemis.size()-1).getHeight() };
+                    position.x = ((int) Monde.this.getWidth() / 2) - ((int) ennemis.get(ennemis.size() - 1).getWidth() / 2);
+                    position.y = -ennemis.get(ennemis.size() - 1).getHeight();
                     break;
                 case 3:
-                    pos = new int[]{((int) Monde.this.getWidth()/2) - ((int)ennemis.get(ennemis.size()-1).getWidth()/2) , Monde.this.getHeight()+ennemis.get(ennemis.size()-1).getHeight() };
-                    break;
-            
+                    position.x = ((int) Monde.this.getWidth() / 2) - ((int) ennemis.get(ennemis.size() - 1).getWidth() / 2);
+                    position.y = Monde.this.getHeight() + ennemis.get(ennemis.size() - 1).getHeight();
+
             }
-            
-            
-            
-            ennemis.get(ennemis.size()-1).setLocation(pos[0], pos[1]);
-            Monde.this.add(ennemis.get(ennemis.size()-1),0);
+
+            ennemis.get(ennemis.size() - 1).setLocation(position);
+            Monde.this.add(ennemis.get(ennemis.size() - 1), 0);
         }
     });
 
@@ -140,116 +143,112 @@ public class Monde extends JPanel {
         }
 
     }
-    private void bougerHero(){
+
+    private void bougerHero() {
         if (listeKeyCodes.contains(KeyEvent.VK_A)) {
             heros.setDirection(Personnages.Direction.GAUCHE);
-            heros.setLocation(heros.getX() - heros.getMaxVitesse(), heros.getY());
+            heros.setLocation(heros.getX() - heros.getVitesse(), heros.getY());
         }
         if (listeKeyCodes.contains(KeyEvent.VK_D)) {
             heros.setDirection(Personnages.Direction.DROITE);
-            heros.setLocation(heros.getX() + heros.getMaxVitesse(), heros.getY());
+            heros.setLocation(heros.getX() + heros.getVitesse(), heros.getY());
         }
-        
+
         for (Obstacles obstacle : obstacles) {
             if (heros.getBounds().intersects(obstacle.getBounds())) {
-                heros.setLocation(heros.getLastPosition()[0], heros.getY());
+                heros.setLocation(heros.getLastPosition().x, heros.getY());
             }
         }
-        if (heros.getX() - heros.getMaxVitesse() <= 0) {
-            heros.setLocation(heros.getLastPosition()[0], heros.getY());
+        if (heros.getX() - heros.getVitesse() <= 0) {
+            heros.setLocation(heros.getLastPosition().x, heros.getY());
         }
-        if (heros.getX() + heros.getWidth() + heros.getMaxVitesse() >= this.getWidth()) {
-            heros.setLocation(heros.getLastPosition()[0], heros.getY());
+        if (heros.getX() + heros.getWidth() + heros.getVitesse() >= this.getWidth()) {
+            heros.setLocation(heros.getLastPosition().x, heros.getY());
         }
-        
-        
-        heros.setLastPosition(new int[]{heros.getX(), heros.getLastPosition()[1]});
-        
+
+        heros.setLastPosition(heros.getLocation());
+
         if (listeKeyCodes.contains(KeyEvent.VK_S)) {
             heros.setDirection(Personnages.Direction.BAS);
             heros.setLocation(heros.getX(), heros.getY()
-                    + heros.getMaxVitesse());
+                    + heros.getVitesse());
         }
         if (listeKeyCodes.contains(KeyEvent.VK_W)) {
             heros.setDirection(Personnages.Direction.HAUT);
-            heros.setLocation(heros.getX(), heros.getY() - heros.getMaxVitesse());
+            heros.setLocation(heros.getX(), heros.getY() - heros.getVitesse());
         }
         for (Obstacles obstacle : obstacles) {
             if (heros.getBounds().intersects(obstacle.getBounds())) {
-                heros.setLocation(heros.getX() ,heros.getLastPosition()[1]);
+                heros.setLocation(heros.getX(), heros.getLastPosition().y);
             }
         }
-        
-        if (heros.getY() + heros.getHeight() + heros.getMaxVitesse() >= this.getHeight()) {
-            heros.setLocation(heros.getX(), heros.getLastPosition()[1]);
+
+        if (heros.getY() + heros.getHeight() + heros.getVitesse() >= this.getHeight()) {
+            heros.setLocation(heros.getX(), heros.getLastPosition().y);
         }
-        if (heros.getY() - heros.getMaxVitesse() <= 0) {
-            heros.setLocation(heros.getX(), heros.getLastPosition()[1]);
+        if (heros.getY() - heros.getVitesse() <= 0) {
+            heros.setLocation(heros.getX(), heros.getLastPosition().y);
         }
-        heros.setLastPosition(new int[]{heros.getLastPosition()[0], heros.getY()});
-        
+        heros.setLastPosition(heros.getLocation());
+
     }
-    private void bougerEnnemi(Ennemis ennemi){
-        int vitesseX = ennemi.getMaxVitesse();
-        int vitesseY = ennemi.getMaxVitesse();
-        
-        if (heros.getX() < ennemi.getX()){
+
+    private void bougerEnnemi(Ennemis ennemi) {
+        int vitesseX = ennemi.getVitesse();
+        int vitesseY = ennemi.getVitesse();
+
+        if (heros.getX() < ennemi.getX()) {
             vitesseX = -vitesseX;
         }
-        if (heros.getY() < ennemi.getY()){
+        if (heros.getY() < ennemi.getY()) {
             vitesseY = -vitesseY;
         }
         ennemi.setLocation(ennemi.getX() + vitesseX, ennemi.getY());
-        
+
         for (Obstacles obstacle : obstacles) {
             if (ennemi.getBounds().intersects(obstacle.getBounds())) {
-                ennemi.setLocation(ennemi.getLastPosition()[0] ,ennemi.getY());
+                ennemi.setLocation(ennemi.getLastPosition().x, ennemi.getY());
             }
         }
-        
+
         ennemi.setLocation(ennemi.getX(), ennemi.getY() + vitesseY);
         for (Obstacles obstacle : obstacles) {
             if (ennemi.getBounds().intersects(obstacle.getBounds())) {
-                ennemi.setLocation(ennemi.getX() ,ennemi.getLastPosition()[1]);
+                ennemi.setLocation(ennemi.getX(), ennemi.getLastPosition().y);
             }
         }
-        ennemi.setLastPosition(new int[]{ennemi.getX(), ennemi.getY()});
-        
+        ennemi.setLastPosition(ennemi.getLocation());
+
         boolean gone = false;
-        for (Projectiles projectile: projectiles){
-            if(ennemi.getBounds().intersects(projectile.getBounds()) && !gone){
+        for (Projectiles projectile : projectiles) {
+            if (ennemi.getBounds().intersects(projectile.getBounds()) && !gone) {
                 gone = true;
                 eraseProjectile.add(projectile);
             }
         }
-        
-        
-        if (ennemi.getBounds().intersects(heros.getBounds()) && !gone){
+
+        if (ennemi.getBounds().intersects(heros.getBounds()) && !gone) {
             controlleur.heroToucher();
             gone = true;
         }
-        
-        if (gone){
+
+        if (gone) {
             enleverEnnemis.add(ennemi);
         }
-        
-        
-        
+
     }
-    
-    
+
     private void majJeu() {
-        
+
         bougerHero();
-        for (Ennemis clone : ennemis){
+        for (Ennemis clone : ennemis) {
             bougerEnnemi(clone);
         }
-        for (Ennemis delete: enleverEnnemis){
+        for (Ennemis delete : enleverEnnemis) {
             ennemis.remove(delete);
             this.remove(delete);
         }
-        
-        
+
         if (listeKeyCodes.contains(KeyEvent.VK_SPACE)) {
             if (!tirer.isRunning()) {
                 tirer.start();
@@ -257,33 +256,28 @@ public class Monde extends JPanel {
         } else {
             tirer.stop();
         }
-        
-        
-        
+
         for (Projectiles projectile : projectiles) {
             projectile.bouger();
-            
-            
+
             //colission avec la fenetre
-            if ( (projectile.getDeltaX() < 0 && projectile.getX() +projectile.getWidth() <= 0)|| (projectile.getDeltaX() > 0 && projectile.getX() >= this.getWidth()) || (projectile.getDeltaY() < 0 && projectile.getY() + projectile.getHeight() <= 0) || (projectile.getDeltaY() > 0 && projectile.getY() >= this.getHeight()) ){
+            if ((projectile.getDeltaX() < 0 && projectile.getX() + projectile.getWidth() <= 0) || (projectile.getDeltaX() > 0 && projectile.getX() >= this.getWidth()) || (projectile.getDeltaY() < 0 && projectile.getY() + projectile.getHeight() <= 0) || (projectile.getDeltaY() > 0 && projectile.getY() >= this.getHeight())) {
                 eraseProjectile.add(projectile);
             }
-            
-            for (Obstacles obstacle: obstacles){
-                if (projectile.getBounds().intersects(obstacle.getBounds())){
+
+            for (Obstacles obstacle : obstacles) {
+                if (projectile.getBounds().intersects(obstacle.getBounds())) {
                     eraseProjectile.add(projectile);
                 }
             }
-            
+
             //faire collision avec les obstacles
         }
-        for (Projectiles projectile: eraseProjectile){
+        for (Projectiles projectile : eraseProjectile) {
             projectiles.remove(projectile);
             this.remove(projectile);
         }
         eraseProjectile.clear();
-        
-        
 
     }
 
@@ -340,9 +334,9 @@ public class Monde extends JPanel {
         //Ajout du heros au centre
         add(heros, 0);
         heros.setLocation(8 * tailleImageGazon - 11, 7 * tailleImageGazon - 25);
-        
-        heros.setLastPosition(new int[]{heros.getX(), heros.getY()});
-        
+
+        heros.setLastPosition(heros.getLocation());
+
         //Disposition des roches
         for (int i = 0; i < 14; i++) {
             for (int j = 0; j < 16; j++) {
