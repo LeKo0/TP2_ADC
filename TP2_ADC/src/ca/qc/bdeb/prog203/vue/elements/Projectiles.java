@@ -19,7 +19,7 @@ public abstract class Projectiles extends JComponent {
 
     protected int deltaX, deltaY;
     protected int hauteur, largeur;
-    protected int vitesse = 10;
+    protected int vitesse = 5;
 
     public Projectiles(int deltaX, int deltaY, int largeur, int hauteur) {
         this.deltaX = deltaX;
@@ -37,15 +37,17 @@ public abstract class Projectiles extends JComponent {
     public void setDeltaY(int deltaY) {
         this.deltaY = deltaY;
     }
-    public int getDeltaX(){
+
+    public int getDeltaX() {
         return deltaX;
     }
-    public int getDeltaY(){
+
+    public int getDeltaY() {
         return deltaY;
     }
 
     public void bouger() {
-        setLocation(getX() + deltaX*vitesse, getY() + deltaY*vitesse);
+        setLocation(getX() + deltaX * vitesse, getY() + deltaY * vitesse);
     }
 
 }

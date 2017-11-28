@@ -19,18 +19,15 @@ import ca.qc.bdeb.prog203.vue.elements.Roche;
 import ca.qc.bdeb.prog203.vue.elements.TBleu;
 import ca.qc.bdeb.prog203.vue.elements.TMauve;
 import ca.qc.bdeb.prog203.vue.elements.TVert;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JPanel;
@@ -44,29 +41,32 @@ import javax.swing.Timer;
 public class Monde extends JPanel {
 
     private enum typeProjectile {
-
         LASER, BALLE
     }
     public static final Image IMAGE_GAZON1 = Toolkit.getDefaultToolkit().getImage("images/floor1.gif");
     public static final Image IMAGE_GAZON2 = Toolkit.getDefaultToolkit().getImage("images/floor2.gif");
     public static final int DIMENSION_GAZON = 32;
     public static final int HAUTEUR = 16, LARGEUR = 14;
+    
     private typeProjectile typeProjectile;
+    
     private Heros heros;
-    private ArrayList<Integer> listeKeyCodes = new ArrayList();
+    
+    private final ArrayList<Integer> listeKeyCodes = new ArrayList();
 
-    private ArrayList<Obstacles> listeObstacles = new ArrayList<>();
+    private final ArrayList<Obstacles> listeObstacles = new ArrayList<>();
 
-    private ArrayList<Bonus> listeBonus = new ArrayList<>();
-    private ArrayList<Bonus> listeBonusAEnlever = new ArrayList<>();
+    private final ArrayList<Bonus> listeBonus = new ArrayList<>();
+    private final ArrayList<Bonus> listeBonusAEnlever = new ArrayList<>();
 
-    private ArrayList<Projectiles> listeProjectiles = new ArrayList<>();
-    private ArrayList<Projectiles> listeProjectilesAEnlever = new ArrayList();
+    private final ArrayList<Projectiles> listeProjectiles = new ArrayList<>();
+    private final ArrayList<Projectiles> listeProjectilesAEnlever = new ArrayList();
 
     private ArrayList<Ennemis> listeEnnemis = new ArrayList<>();
-    private ArrayList<Ennemis> listeEnnemisAEnlever = new ArrayList<>();
+    private final ArrayList<Ennemis> listeEnnemisAEnlever = new ArrayList<>();
 
-    private ControlleurADC controlleur;
+    private final ControlleurADC controlleur;
+    
     private Random random = new Random();
 
     private final Timer cadenceDeTir = new javax.swing.Timer(250, new ActionListener() {
@@ -121,7 +121,7 @@ public class Monde extends JPanel {
             Monde.this.add(listeEnnemis.get(listeEnnemis.size() - 1), 0);
         }
     });
-    private Thread thread = new Thread() {
+    private final Thread thread = new Thread() {
         @Override
         public void run() {
             while (true) {
@@ -143,6 +143,7 @@ public class Monde extends JPanel {
 
     public Monde(ControlleurADC controlleur) {
         this.controlleur = controlleur;
+        
         setPreferredSize(new Dimension(HAUTEUR * DIMENSION_GAZON, LARGEUR * DIMENSION_GAZON));
         setLayout(null);
         typeProjectile = typeProjectile.LASER;
@@ -221,10 +222,10 @@ public class Monde extends JPanel {
     private void majJeu() {
 
         bougerHero();
-        bougerSupprimerEnnemis();
-        bougerSupprimerProjectiles();
-        activerBonus();
-        tirer();
+        majEnnemis();
+        majProjectiles();
+        majBonus();
+        majTirer();
 
     }
 
@@ -276,7 +277,7 @@ public class Monde extends JPanel {
 
     }
 
-    private void bougerSupprimerEnnemis() {
+    private void majEnnemis() {
         for (Ennemis ennemi : listeEnnemis) {
             int vitesseX = ennemi.getVitesse();
             int vitesseY = ennemi.getVitesse();
@@ -333,7 +334,7 @@ public class Monde extends JPanel {
         listeEnnemisAEnlever.clear();
     }
 
-    private void bougerSupprimerProjectiles() {
+    private void majProjectiles() {
         for (Projectiles projectile : listeProjectiles) {
 
             projectile.bouger();
@@ -361,7 +362,7 @@ public class Monde extends JPanel {
 
     }
 
-    private void tirer() {
+    private void majTirer() {
         if (listeKeyCodes.contains(KeyEvent.VK_SPACE)) {
             if (!cadenceDeTir.isRunning()) {
                 cadenceDeTir.start();
@@ -390,11 +391,9 @@ public class Monde extends JPanel {
         }
         laserTemp.setLocation(heros.getLocation());
         listeProjectiles.add(laserTemp);
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+        
                 add(laserTemp, 0);
-            }
-        });
+            
 
     }
 
@@ -451,7 +450,7 @@ public class Monde extends JPanel {
         }
     }
 
-    private void activerBonus() {
+    private void majBonus() {
         for (Bonus bonus : listeBonus) {
             if (bonus.getBounds().intersects(heros.getBounds())) {
                 

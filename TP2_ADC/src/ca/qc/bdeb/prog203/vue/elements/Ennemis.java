@@ -30,7 +30,7 @@ public abstract class Ennemis extends Personnages {
 
     private final void initBonus() {
         Random random = new Random();
-        if (random.nextInt(15) < 15) {
+        if (random.nextInt(15) == 0) {
             this.bonus = new Bonus();
         } else {
             this.bonus = null;
