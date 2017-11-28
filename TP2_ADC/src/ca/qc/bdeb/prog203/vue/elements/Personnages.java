@@ -22,7 +22,6 @@ public abstract class Personnages extends JComponent {
         HAUT, BAS, DROITE, GAUCHE
     }
 
-    protected int deltaX, deltaY;
     protected final int vitesse;
     protected Image imageFace, imageDos, imageDroite, imageGauche;
     protected int pointsDeVie;
@@ -36,8 +35,7 @@ public abstract class Personnages extends JComponent {
         this.imageDroite = imageDroite;
         this.imageGauche = imageGauche;
         this.pointsDeVie = pointsDeVie;
-        deltaX = 0;
-        deltaY = 0;
+  
 
         setSize(largeur, hauteur);
     }
@@ -68,32 +66,8 @@ public abstract class Personnages extends JComponent {
 
     public void setLastPosition(Point lastPosition) {
         this.lastPosition = lastPosition;
-    }
-
-    public void bouger() {
-        setLocation(getX() + deltaX * vitesse, getY() + deltaY * vitesse);
-        deltaX = 0;
-        deltaY = 0;
-    }
-
-    public void setDeltaX(int deltaX) {
-        this.deltaX = deltaX;
-    }
-
-    public void setDeltaY(int deltaY) {
-        this.deltaY = deltaY;
-    }
-
-    public int getDeltaX() {
-        return deltaX;
-    }
-
-    public int getDeltaY() {
-        return deltaY;
-    }
+    }   
     
-    
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
