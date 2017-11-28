@@ -24,11 +24,11 @@ public class Bonus extends JComponent {
         Toolkit.getDefaultToolkit().getImage("images/boni5.gif"),
         Toolkit.getDefaultToolkit().getImage("images/boni6.gif")};
 
-    enum Type {
+    public enum Type {
         BALLES, ZAPPER, BOOST
     }
 
-    private Type typeBonus;
+    private Type type;
 
     public Bonus() {
         setSize(HAUTEUR, LARGEUR);
@@ -40,26 +40,25 @@ public class Bonus extends JComponent {
 
         switch (random.nextInt(3)) {
             case 1:
-                this.typeBonus = Type.BALLES;
+                this.type = Type.BALLES;
                 break;
             case 2:
-                this.typeBonus = Type.ZAPPER;
+                this.type = Type.ZAPPER;
                 break;
             default: //case 3:
-                this.typeBonus = Type.BOOST;
+                this.type = Type.BOOST;
         }
 
     }
 
-    public Type getTypeBonus() {
-        return typeBonus;
+    public Type getType() {
+        return type;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        System.out.println(typeBonus);
-        switch (typeBonus) {
+        switch (type) {
             case BALLES:
                 g.drawImage(images[0], 0, 0, this);
                 break;

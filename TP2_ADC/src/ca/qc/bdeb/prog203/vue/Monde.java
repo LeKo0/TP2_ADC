@@ -54,12 +54,18 @@ public class Monde extends JPanel {
     private typeProjectile typeProjectile;
     private Heros heros;
     private ArrayList<Integer> listeKeyCodes = new ArrayList();
+
+    private ArrayList<Obstacles> listeObstacles = new ArrayList<>();
+
     private ArrayList<Bonus> listeBonus = new ArrayList<>();
-    private ArrayList<Projectiles> projectiles = new ArrayList<>();
-    private ArrayList<Obstacles> obstacles = new ArrayList<>();
-    private ArrayList<Ennemis> ennemis = new ArrayList<>();
-    private ArrayList<Ennemis> enleverEnnemis = new ArrayList<>();
-    private ArrayList<Projectiles> eraseProjectile = new ArrayList();
+    private ArrayList<Bonus> listeBonusAEnlever = new ArrayList<>();
+
+    private ArrayList<Projectiles> listeProjectiles = new ArrayList<>();
+    private ArrayList<Projectiles> listeProjectilesAEnlever = new ArrayList();
+
+    private ArrayList<Ennemis> listeEnnemis = new ArrayList<>();
+    private ArrayList<Ennemis> listeEnnemisAEnlever = new ArrayList<>();
+
     private ControlleurADC controlleur;
     private Random random = new Random();
 
@@ -76,20 +82,20 @@ public class Monde extends JPanel {
         }
 
     });
-    private final Timer spawm = new javax.swing.Timer(1000, new ActionListener() {
+    private final Timer spawm = new javax.swing.Timer(3000, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             Point position = new Point(0, 0);
 
             switch (random.nextInt(3)) {
                 case 0:
-                    ennemis.add(new TBleu());
+                    listeEnnemis.add(new TBleu());
                     break;
                 case 1:
-                    ennemis.add(new TMauve());
+                    listeEnnemis.add(new TMauve());
                     break;
                 case 2:
-                    ennemis.add(new TVert());
+                    listeEnnemis.add(new TVert());
                     break;
             }
             switch (random.nextInt(4)) {
@@ -111,8 +117,8 @@ public class Monde extends JPanel {
 
             }
 
-            ennemis.get(ennemis.size() - 1).setLocation(position);
-            Monde.this.add(ennemis.get(ennemis.size() - 1), 0);
+            listeEnnemis.get(listeEnnemis.size() - 1).setLocation(position);
+            Monde.this.add(listeEnnemis.get(listeEnnemis.size() - 1), 0);
         }
     });
     private Thread thread = new Thread() {
@@ -139,7 +145,7 @@ public class Monde extends JPanel {
         this.controlleur = controlleur;
         setPreferredSize(new Dimension(HAUTEUR * DIMENSION_GAZON, LARGEUR * DIMENSION_GAZON));
         setLayout(null);
-        typeProjectile = typeProjectile.BALLE;
+        typeProjectile = typeProjectile.LASER;
 
         cadenceDeTir.setInitialDelay(0);
         initGraphiques();
@@ -157,7 +163,6 @@ public class Monde extends JPanel {
         //Ajout du heros au centre
         add(heros, 0);
         heros.setLocation(8 * DIMENSION_GAZON - 11, 7 * DIMENSION_GAZON - 25);
-
         heros.setLastPosition(heros.getLocation());
 
         //Disposition des roches
@@ -168,7 +173,7 @@ public class Monde extends JPanel {
                     rocheTemp = new Roche();
                     rocheTemp.setLocation(j * DIMENSION_GAZON, i * DIMENSION_GAZON);
                     roches.add(rocheTemp);
-                    obstacles.add(rocheTemp);
+                    listeObstacles.add(rocheTemp);
                     add(rocheTemp, 0);
                 }
             }
@@ -178,7 +183,7 @@ public class Monde extends JPanel {
         for (int i = 0; i < 4; i++) {
             buissonTemp = new Buisson();
             buissons.add(buissonTemp);
-            obstacles.add(buissonTemp);
+            listeObstacles.add(buissonTemp);
             add(buissonTemp, 0);
         }
         buissons.get(0).setLocation(3 * DIMENSION_GAZON, 3 * DIMENSION_GAZON);
@@ -218,6 +223,7 @@ public class Monde extends JPanel {
         bougerHero();
         bougerSupprimerEnnemis();
         bougerSupprimerProjectiles();
+        activerBonus();
         tirer();
 
     }
@@ -232,7 +238,7 @@ public class Monde extends JPanel {
             heros.setDirection(Personnages.Direction.DROITE);
             heros.setLocation(heros.getX() + heros.getVitesse(), heros.getY());
         }
-        for (Obstacles obstacle : obstacles) {
+        for (Obstacles obstacle : listeObstacles) {
             if (heros.getBounds().intersects(obstacle.getBounds())) {
                 heros.setLocation(heros.getLastPosition().x, heros.getY());
             }
@@ -254,7 +260,7 @@ public class Monde extends JPanel {
             heros.setDirection(Personnages.Direction.HAUT);
             heros.setLocation(heros.getX(), heros.getY() - heros.getVitesse());
         }
-        for (Obstacles obstacle : obstacles) {
+        for (Obstacles obstacle : listeObstacles) {
             if (heros.getBounds().intersects(obstacle.getBounds())) {
                 heros.setLocation(heros.getX(), heros.getLastPosition().y);
             }
@@ -271,7 +277,7 @@ public class Monde extends JPanel {
     }
 
     private void bougerSupprimerEnnemis() {
-        for (Ennemis ennemi : ennemis) {
+        for (Ennemis ennemi : listeEnnemis) {
             int vitesseX = ennemi.getVitesse();
             int vitesseY = ennemi.getVitesse();
 
@@ -283,14 +289,14 @@ public class Monde extends JPanel {
             }
             ennemi.setLocation(ennemi.getX() + vitesseX, ennemi.getY());
 
-            for (Obstacles obstacle : obstacles) {
+            for (Obstacles obstacle : listeObstacles) {
                 if (ennemi.getBounds().intersects(obstacle.getBounds())) {
                     ennemi.setLocation(ennemi.getLastPosition().x, ennemi.getY());
                 }
             }
 
             ennemi.setLocation(ennemi.getX(), ennemi.getY() + vitesseY);
-            for (Obstacles obstacle : obstacles) {
+            for (Obstacles obstacle : listeObstacles) {
                 if (ennemi.getBounds().intersects(obstacle.getBounds())) {
                     ennemi.setLocation(ennemi.getX(), ennemi.getLastPosition().y);
                 }
@@ -298,10 +304,10 @@ public class Monde extends JPanel {
             ennemi.setLastPosition(ennemi.getLocation());
 
             boolean dejaTouche = false;
-            for (Projectiles projectile : projectiles) {
+            for (Projectiles projectile : listeProjectiles) {
                 if (ennemi.getBounds().intersects(projectile.getBounds()) && !dejaTouche) {
                     dejaTouche = true;
-                    eraseProjectile.add(projectile);
+                    listeProjectilesAEnlever.add(projectile);
                 }
             }
 
@@ -311,46 +317,47 @@ public class Monde extends JPanel {
             }
 
             if (dejaTouche) {
-                enleverEnnemis.add(ennemi);
+                listeEnnemisAEnlever.add(ennemi);
             }
         }
-        for (Ennemis ennemi : enleverEnnemis) {
+        for (Ennemis ennemi : listeEnnemisAEnlever) {
             dropBonus(ennemi);
+            System.out.println("----");
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     Monde.this.remove(ennemi);
                 }
             });
         }
-        ennemis.removeAll(enleverEnnemis);
-        enleverEnnemis.clear();
+        listeEnnemis.removeAll(listeEnnemisAEnlever);
+        listeEnnemisAEnlever.clear();
     }
 
     private void bougerSupprimerProjectiles() {
-        for (Projectiles projectile : projectiles) {
+        for (Projectiles projectile : listeProjectiles) {
 
             projectile.bouger();
 
             if (!this.getBounds().contains(projectile.getBounds())) {
-                eraseProjectile.add(projectile);
+                listeProjectilesAEnlever.add(projectile);
             }
 
-            for (Obstacles obstacle : obstacles) {
+            for (Obstacles obstacle : listeObstacles) {
                 if (projectile.getBounds().intersects(obstacle.getBounds())) {
-                    eraseProjectile.add(projectile);
+                    listeProjectilesAEnlever.add(projectile);
                 }
             }
 
         }
-        for (Projectiles projectile : eraseProjectile) {
+        for (Projectiles projectile : listeProjectilesAEnlever) {
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     Monde.this.remove(projectile);
                 }
             });
         }
-        projectiles.removeAll(eraseProjectile);
-        eraseProjectile.clear();
+        listeProjectiles.removeAll(listeProjectilesAEnlever);
+        listeProjectilesAEnlever.clear();
 
     }
 
@@ -382,7 +389,7 @@ public class Monde extends JPanel {
                 laserTemp = new Laser(-1, 0);
         }
         laserTemp.setLocation(heros.getLocation());
-        projectiles.add(laserTemp);
+        listeProjectiles.add(laserTemp);
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 add(laserTemp, 0);
@@ -420,7 +427,7 @@ public class Monde extends JPanel {
 
         for (Balle balle : ballesTemp) {
             balle.setLocation(heros.getLocation());
-            projectiles.add(balle);
+            listeProjectiles.add(balle);
         }
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -435,13 +442,50 @@ public class Monde extends JPanel {
 
     private void dropBonus(Ennemis ennemi) {
 
-        System.out.println(ennemi.getBonus());
         if (ennemi.getBonus() != null) {
             Bonus bonus = ennemi.getBonus();
-            Monde.this.add(bonus, 0);
-            bonus.setLocation(300, 300);
+            listeBonus.add(bonus);
+            add(bonus, 0);
+            bonus.setLocation(ennemi.getLocation());
 
         }
+    }
+
+    private void activerBonus() {
+        for (Bonus bonus : listeBonus) {
+            if (bonus.getBounds().intersects(heros.getBounds())) {
+                
+                this.listeBonusAEnlever.add(bonus);
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        Monde.this.remove(bonus);
+                    }
+                });
+
+                switch (bonus.getType()) {
+                    case BALLES:
+                        this.typeProjectile = typeProjectile.BALLE;
+                        break;
+                    case ZAPPER:
+                        for (Ennemis ennemi : listeEnnemis) {
+                            SwingUtilities.invokeLater(new Runnable() {
+                                public void run() {
+                                    Monde.this.remove(ennemi);
+                                }
+                            });
+                        }
+                        listeEnnemis.clear();
+                        listeEnnemisAEnlever.clear();
+
+                        break;
+                    default: //case BOOST:
+                    //Mettre points de vie max
+
+                }
+
+            }
+        }
+        listeBonus.removeAll(listeBonusAEnlever);
     }
 
     @Override
