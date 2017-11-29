@@ -24,28 +24,18 @@ public abstract class Personnages extends JComponent {
 
     protected final int vitesse;
     protected Image imageFace, imageDos, imageDroite, imageGauche;
-    protected int pointsDeVie;
     protected Direction direction = Direction.DROITE; //Direction par default
     protected Point lastPosition = new Point();
 
-    public Personnages(int pointsDeVie, Image imageFace, Image imageDos, Image imageDroite, Image imageGauche, int largeur, int hauteur, int vitesse) {
+    public Personnages(Image imageFace, Image imageDos, Image imageDroite, Image imageGauche, int largeur, int hauteur, int vitesse) {
         this.vitesse = vitesse;
         this.imageFace = imageFace;
         this.imageDos = imageDos;
         this.imageDroite = imageDroite;
         this.imageGauche = imageGauche;
-        this.pointsDeVie = pointsDeVie;
   
 
         setSize(largeur, hauteur);
-    }
-
-    public void setPointsDeVie(int pointsDeVie) {
-        this.pointsDeVie = pointsDeVie;
-    }
-
-    public int getPointsDeVie() {
-        return pointsDeVie;
     }
 
     public int getVitesse() {

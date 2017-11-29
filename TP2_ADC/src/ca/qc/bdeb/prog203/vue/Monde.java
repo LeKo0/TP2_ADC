@@ -317,23 +317,25 @@ public class Monde extends JPanel {
             boolean dejaTouche = false;
             for (Projectiles projectile : listeProjectiles) {
                 if (ennemi.getBounds().intersects(projectile.getBounds()) && !dejaTouche) {
-                    dejaTouche = true;
                     listeProjectilesAEnlever.add(projectile);
+                    ennemi.setPointsDeVie(ennemi.getPointsDeVie() - 1);
+                    dejaTouche = true;
+
                 }
             }
 
             if (ennemi.getBounds().intersects(heros.getBounds()) && !dejaTouche) {
                 controlleur.heroToucher();
+                ennemi.setPointsDeVie(0);
                 dejaTouche = true;
             }
 
-            if (dejaTouche) {
+            if (dejaTouche && ennemi.getPointsDeVie() == 0 ) {
                 listeEnnemisAEnlever.add(ennemi);
             }
         }
         for (Ennemis ennemi : listeEnnemisAEnlever) {
             dropBonus(ennemi);
-            System.out.println("----");
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     Monde.this.remove(ennemi);
