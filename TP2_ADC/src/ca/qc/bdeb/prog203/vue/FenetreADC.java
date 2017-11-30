@@ -24,15 +24,22 @@ import javax.swing.JPanel;
  *
  * @author 1666876
  */
-public class FenetreADC extends JFrame implements Observer{
+public class FenetreADC extends JFrame implements Observer {
 
     private JMenuBar mnuBar;
     private JMenu mnuFichier, mnuHelp;
     private JMenuItem mnuNouvellePartie, mnuQuitter, mnuAide, mnuAPropos;
     private Monde pnlMonde;
     private JPanel pnlInfo;
-    private ControlleurADC controlleur;
+    private final ControlleurADC controlleur;
 
+    /**
+     * Initialise toutes les composantes de la fenetre et donne le focus au
+     * monde
+     *
+     * @param controlleur Controlleur
+     * @param modele Modele
+     */
     public FenetreADC(ControlleurADC controlleur, ModeleADC modele) {
         this.controlleur = controlleur;
         setTitle("Tantacule Mauve: La contre-attaque");
@@ -41,12 +48,13 @@ public class FenetreADC extends JFrame implements Observer{
         initMenu();
         initMonde();
         initInfo();
-        creerEvenement();
+        initEvenementMenu();
 
         setResizable(false);
         pack();
-        setVisible(true);
         pnlMonde.setFocusable(true);
+        setVisible(true);
+
     }
 
     @Override//on doit update le chit des vies (comme ce qui est sous le jeu) ;)
@@ -54,8 +62,6 @@ public class FenetreADC extends JFrame implements Observer{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
-    
     /**
      * La méthode sera utilisé pour initialiser le menu
      */
@@ -82,8 +88,6 @@ public class FenetreADC extends JFrame implements Observer{
 
     }
 
-    
-    
     /**
      * La méthode sera utilisé pour initialiser l'affichage des informations sur
      * le déroulement du jeux
@@ -91,32 +95,35 @@ public class FenetreADC extends JFrame implements Observer{
     private void initInfo() {
 
         pnlInfo = new JPanel();
-        add(pnlInfo,BorderLayout.SOUTH);
+        add(pnlInfo, BorderLayout.SOUTH);
         pnlInfo.add(new JLabel("JPANEL INFO"));
-        
+
     }
 
     /**
-     * La méthode sera utilisé pour initialiser l'affichage du jeux (c'est à
-     * dire les personnages, les buissons, etc)
+     * Initialise le monde
      */
     private void initMonde() {
         pnlMonde = new Monde(controlleur);
         add(pnlMonde);
 
     }
-    private void nouvellePartie(){
-        
+
+    /**
+     * Créé une nouvelle partie
+     */
+    private void initPartie() {
+
     }
 
-    
-    
-
-    private void creerEvenement() {
+    /**
+     * Initialise les evenements en lien avec le menu
+     */
+    private void initEvenementMenu() {
         mnuNouvellePartie.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                nouvellePartie();
+                initPartie();
             }
         });
         mnuQuitter.addActionListener(new ActionListener() {
@@ -125,7 +132,7 @@ public class FenetreADC extends JFrame implements Observer{
                 System.exit(0);
             }
         });
-        
+
         mnuAide.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -18,9 +18,17 @@ public class ControlleurADC {
     private final ModeleADC modeleADC = new ModeleADC();
     private final FenetreADC fenetreADC = new FenetreADC(this,modeleADC);
 
+    /**
+     *
+     */
     public ControlleurADC() {
     }
     
+    /**
+     *
+     * @param vie
+     * @return
+     */
     public boolean finDePartie(int vie){
         if (vie >= 0){
             return true;
@@ -28,10 +36,18 @@ public class ControlleurADC {
         return false;
     }
     
+    /**
+     *
+     */
     public void heroToucher(){
         modeleADC.setPointsVie(modeleADC.getPointsVie() - 1);
         finDePartie(modeleADC.getPointsVie());
     }
+
+    /**
+     *
+     * @param ennemi
+     */
     public void ennemiTuer(Ennemis ennemi){
         
     }

@@ -15,24 +15,42 @@ public class ModeleADC extends Observable {
     private int pointage;
     private int pointsVie;
     
+    /**
+     *
+     */
     public ModeleADC() {
         this.pointage = 0;
         this.pointsVie = 0;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPointage() {
         return pointage;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPointsVie() {
         return pointsVie;
     }
     
+    /**
+     *
+     */
     public void majObserver(){
         setChanged();
         notifyObservers();
     }
 
+    /**
+     *
+     * @param pointsVie
+     */
     public void setPointsVie(int pointsVie) {
         this.pointsVie = pointsVie;
     }

@@ -7,7 +7,12 @@ package ca.qc.bdeb.prog203.vue.elements;
 
 import java.awt.Toolkit;
 
-
+/**
+ * Tentacule blue
+ * PV : 1
+ * Points : 2
+ * Vitesse : 2
+ */
 public class TBleu extends Ennemis {
 
     public TBleu() {

@@ -14,8 +14,18 @@ import java.awt.Graphics;
  */
 public class Laser extends Projectiles {
 
-    public static int LARGEUR = 20, HAUTEUR = 5;
+    public static int LARGEUR = 20,
 
+    /**
+     *
+     */
+    HAUTEUR = 5;
+
+    /**
+     *
+     * @param deltaX
+     * @param deltaY
+     */
     public Laser(int deltaX, int deltaY) {
 
         super(deltaX, deltaY, LARGEUR, HAUTEUR);

@@ -8,9 +8,10 @@ package ca.qc.bdeb.prog203.vue.elements;
 import java.awt.Toolkit;
 
 /**
- * Vitesse de 1 et PV de 1
- *
- * @author Leo
+ * Tentacule verte
+ * PV : 1
+ * Points : 1
+ * Vitesse : 1
  */
 public class TVert extends Ennemis {
 

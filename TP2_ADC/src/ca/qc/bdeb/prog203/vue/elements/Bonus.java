@@ -18,18 +18,43 @@ import javax.swing.JComponent;
 public class Bonus extends JComponent {
 
     private Random random;
-    public static int HAUTEUR = 32, LARGEUR = 32;
+    public static int HAUTEUR = 32,
+
+    /**
+     *
+     */
+    LARGEUR = 32;
     private Image[] images = {
         Toolkit.getDefaultToolkit().getImage("images/boni4.gif"),
         Toolkit.getDefaultToolkit().getImage("images/boni5.gif"),
         Toolkit.getDefaultToolkit().getImage("images/boni6.gif")};
 
+    /**
+     *
+     */
     public enum Type {
-        BALLES, ZAPPER, BOOST
+
+        /**
+         *
+         */
+        BALLES,
+
+        /**
+         *
+         */
+        ZAPPER,
+
+        /**
+         *
+         */
+        BOOST
     }
 
     private Type type;
 
+    /**
+     *
+     */
     public Bonus() {
         setSize(HAUTEUR, LARGEUR);
         initType();
@@ -51,6 +76,10 @@ public class Bonus extends JComponent {
 
     }
 
+    /**
+     *
+     * @return
+     */
     public Type getType() {
         return type;
     }

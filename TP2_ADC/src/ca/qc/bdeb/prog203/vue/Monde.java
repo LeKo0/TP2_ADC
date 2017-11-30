@@ -29,6 +29,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -40,35 +41,35 @@ import javax.swing.Timer;
  */
 public class Monde extends JPanel {
 
+    /**
+     * Deux types de projectiles
+     */
     private enum typeProjectile {
+
         LASER, BALLE
     }
+
     public static final Image IMAGE_GAZON1 = Toolkit.getDefaultToolkit().getImage("images/floor1.gif");
     public static final Image IMAGE_GAZON2 = Toolkit.getDefaultToolkit().getImage("images/floor2.gif");
     public static final int DIMENSION_GAZON = 32;
     public static final int HAUTEUR = 16, LARGEUR = 14;
-    
+
     private typeProjectile typeProjectile;
-    
     private Heros heros;
-    
     private final ArrayList<Integer> listeKeyCodes = new ArrayList();
-
     private final ArrayList<Obstacles> listeObstacles = new ArrayList<>();
-
     private final ArrayList<Bonus> listeBonus = new ArrayList<>();
     private final ArrayList<Bonus> listeBonusAEnlever = new ArrayList<>();
-
     private final ArrayList<Projectiles> listeProjectiles = new ArrayList<>();
     private final ArrayList<Projectiles> listeProjectilesAEnlever = new ArrayList();
-
     private ArrayList<Ennemis> listeEnnemis = new ArrayList<>();
     private final ArrayList<Ennemis> listeEnnemisAEnlever = new ArrayList<>();
-
     private final ControlleurADC controlleur;
-    
-    private Random random = new Random();
 
+    private Random random = new Random();
+    /**
+     * Fait en sorte que le delais minimale entre deux tir est 250 ms
+     */
     private final Timer cadenceDeTir = new javax.swing.Timer(250, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent ae) {
@@ -82,52 +83,61 @@ public class Monde extends JPanel {
         }
 
     });
+    /**
+     * Fait apparaitre une tentacule chauque 3000 ms sur un des cotés (choisi
+     * aléatoirement)
+     */
     private final Timer spawm = new javax.swing.Timer(3000, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             Point position = new Point(0, 0);
+            Ennemis ennemi = null;
 
             switch (random.nextInt(3)) {
                 case 0:
-                    listeEnnemis.add(new TBleu());
+                    listeEnnemis.add(ennemi = new TBleu());
                     break;
                 case 1:
-                    listeEnnemis.add(new TMauve());
+                    listeEnnemis.add(ennemi = new TMauve());
                     break;
                 case 2:
-                    listeEnnemis.add(new TVert());
+                    listeEnnemis.add(ennemi = new TVert());
                     break;
             }
             switch (random.nextInt(4)) {
                 case 0:
                     position.x = -Ennemis.LARGEUR;
-                    position.y = ((int) Monde.this.getHeight() / 2) - ((int) Ennemis.HAUTEUR / 2);
+                    position.y = (getHeight() / 2) - (Ennemis.HAUTEUR / 2);
                     break;
                 case 1:
-                    position.x = Ennemis.LARGEUR + Monde.this.getWidth();
-                    position.y = ((int) Monde.this.getHeight() / 2) - ((int) Ennemis.HAUTEUR / 2);
+                    position.x = Ennemis.LARGEUR + getWidth();
+                    position.y = (getHeight() / 2) - (Ennemis.HAUTEUR / 2);
                     break;
                 case 2:
-                    position.x = ((int) Monde.this.getWidth() / 2) - ((int) Ennemis.LARGEUR / 2);
+                    position.x = (getWidth() / 2) - (Ennemis.LARGEUR / 2);
                     position.y = -Ennemis.HAUTEUR;
                     break;
                 case 3:
-                    position.x = ((int) Monde.this.getWidth() / 2) - ((int) Ennemis.LARGEUR / 2);
-                    position.y = Monde.this.getHeight() + Ennemis.HAUTEUR;
+                    position.x = (getWidth() / 2)  - (Ennemis.LARGEUR / 2);
+                    position.y = getHeight() + Ennemis.HAUTEUR;
 
             }
 
-            listeEnnemis.get(listeEnnemis.size() - 1).setLocation(position);
-            Monde.this.add(listeEnnemis.get(listeEnnemis.size() - 1), 0);
+            ennemi.setLocation(position);
+            Monde.this.add(ennemi, 0);
         }
     });
+    /**
+     * Thread de jeu. Appelle la mise à jour du jeu et fait sleep le thread 15
+     * ms
+     */
     private final Thread thread = new Thread() {
         @Override
         public void run() {
             while (true) {
                 majJeu();
-                Monde.this.invalidate();
-                Monde.this.repaint();
+                invalidate();
+                repaint();
                 try {
                     Thread.sleep(15);
                 } catch (InterruptedException ex) {
@@ -141,23 +151,33 @@ public class Monde extends JPanel {
 
     };
 
+    /**
+     * Constructeur Initialise le projectile à LASER (par défaut) Ajuste le
+     * délais initial de tir à 0
+     *
+     * @param controlleur Controlleur du jeu
+     */
     public Monde(ControlleurADC controlleur) {
         this.controlleur = controlleur;
-        
+
         setPreferredSize(new Dimension(HAUTEUR * DIMENSION_GAZON, LARGEUR * DIMENSION_GAZON));
         setLayout(null);
-        typeProjectile = typeProjectile.LASER;
 
+        typeProjectile = typeProjectile.LASER;
         cadenceDeTir.setInitialDelay(0);
+
         initGraphiques();
-        nouvellePartie();
+        initPartie();
 
     }
 
+    /**
+     * Initialise les graphiques du jeu
+     */
     private void initGraphiques() {
         heros = new Heros();
-        ArrayList<Roche> roches = new ArrayList<>();
-        ArrayList<Buisson> buissons = new ArrayList<>();
+        ArrayList<Roche> listeRoches = new ArrayList<>();
+        ArrayList<Buisson> listeBuissons = new ArrayList<>();
         Roche rocheTemp;
         Buisson buissonTemp;
 
@@ -173,7 +193,7 @@ public class Monde extends JPanel {
                         || ((j == 0 | j == 15) & (i <= 3 || i >= 10))) {
                     rocheTemp = new Roche();
                     rocheTemp.setLocation(j * DIMENSION_GAZON, i * DIMENSION_GAZON);
-                    roches.add(rocheTemp);
+                    listeRoches.add(rocheTemp);
                     listeObstacles.add(rocheTemp);
                     add(rocheTemp, 0);
                 }
@@ -183,25 +203,33 @@ public class Monde extends JPanel {
         //Disposition des buissons
         for (int i = 0; i < 4; i++) {
             buissonTemp = new Buisson();
-            buissons.add(buissonTemp);
+            listeBuissons.add(buissonTemp);
             listeObstacles.add(buissonTemp);
             add(buissonTemp, 0);
         }
-        buissons.get(0).setLocation(3 * DIMENSION_GAZON, 3 * DIMENSION_GAZON);
-        buissons.get(1).setLocation(12 * DIMENSION_GAZON, 3 * DIMENSION_GAZON);
-        buissons.get(2).setLocation(3 * DIMENSION_GAZON, 10 * DIMENSION_GAZON);
-        buissons.get(3).setLocation(12 * DIMENSION_GAZON, 10 * DIMENSION_GAZON);
+        listeBuissons.get(0).setLocation(3 * DIMENSION_GAZON, 3 * DIMENSION_GAZON);
+        listeBuissons.get(1).setLocation(12 * DIMENSION_GAZON, 3 * DIMENSION_GAZON);
+        listeBuissons.get(2).setLocation(3 * DIMENSION_GAZON, 10 * DIMENSION_GAZON);
+        listeBuissons.get(3).setLocation(12 * DIMENSION_GAZON, 10 * DIMENSION_GAZON);
 
     }
 
-    private void nouvellePartie() {
-        creerEvenement();
+    /**
+     * Initialise la partie
+     */
+    private void initPartie() {
+        initEvenementsTouches();
         thread.start();
         spawm.start();
 
     }
 
-    private void creerEvenement() {
+    /**
+     * Initialise les évènements en lien avec les touches du clavier Si on appui
+     * sur une touche : on ajoute le keyCode dans listeKeyCodes Si on relache la
+     * touche : on retire le keyCode de listeKeyCodes
+     */
+    private void initEvenementsTouches() {
         this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -219,6 +247,9 @@ public class Monde extends JPanel {
 
     }
 
+    /**
+     * Met à jour l'état du jeu
+     */
     private void majJeu() {
 
         bougerHero();
@@ -229,6 +260,10 @@ public class Monde extends JPanel {
 
     }
 
+    /**
+     * Bouge le héros en fonction des touches enfoncés tout en gerant les
+     * collisions
+     */
     private void bougerHero() {
 
         if (listeKeyCodes.contains(KeyEvent.VK_A)) {
@@ -277,6 +312,10 @@ public class Monde extends JPanel {
 
     }
 
+    /**
+     * Bouge les héros en fonction de la position du héros tout en gerant les
+     * collisions
+     */
     private void majEnnemis() {
         for (Ennemis ennemi : listeEnnemis) {
             int vitesseX = ennemi.getVitesse();
@@ -330,13 +369,14 @@ public class Monde extends JPanel {
                 dejaTouche = true;
             }
 
-            if (dejaTouche && ennemi.getPointsDeVie() == 0 ) {
+            if (dejaTouche && ennemi.getPointsDeVie() == 0) {
                 listeEnnemisAEnlever.add(ennemi);
             }
         }
         for (Ennemis ennemi : listeEnnemisAEnlever) {
             dropBonus(ennemi);
             SwingUtilities.invokeLater(new Runnable() {
+                @Override
                 public void run() {
                     Monde.this.remove(ennemi);
                 }
@@ -346,6 +386,10 @@ public class Monde extends JPanel {
         listeEnnemisAEnlever.clear();
     }
 
+    /**
+     * Bouge les projectiles en fonction de leur vitesse de départ tout en
+     * gerant les collisions
+     */
     private void majProjectiles() {
         for (Projectiles projectile : listeProjectiles) {
 
@@ -364,6 +408,7 @@ public class Monde extends JPanel {
         }
         for (Projectiles projectile : listeProjectilesAEnlever) {
             SwingUtilities.invokeLater(new Runnable() {
+                @Override
                 public void run() {
                     Monde.this.remove(projectile);
                 }
@@ -374,6 +419,9 @@ public class Monde extends JPanel {
 
     }
 
+    /**
+     * Déterminer si il faut tirer ou non
+     */
     private void majTirer() {
         if (listeKeyCodes.contains(KeyEvent.VK_SPACE)) {
             if (!cadenceDeTir.isRunning()) {
@@ -384,6 +432,9 @@ public class Monde extends JPanel {
         }
     }
 
+    /**
+     * Initialise un nouveau laser partant du héros et allant dans sa direction
+     */
     private void tirerLaser() {
 
         Laser laserTemp;
@@ -403,12 +454,16 @@ public class Monde extends JPanel {
         }
         laserTemp.setLocation(heros.getLocation());
         listeProjectiles.add(laserTemp);
-        
-                add(laserTemp, 0);
-            
+
+        add(laserTemp, 0);
 
     }
 
+    /**
+     * Initialise trois nouvelles balles partant du héros et allant dans sa
+     * direction
+     *
+     */
     private void tirerBalle() {
 
         Balle[] ballesTemp = new Balle[3];
@@ -441,6 +496,7 @@ public class Monde extends JPanel {
             listeProjectiles.add(balle);
         }
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 add(ballesTemp[0], 0);
                 add(ballesTemp[1], 0);
@@ -462,12 +518,16 @@ public class Monde extends JPanel {
         }
     }
 
+    /**
+     * Vérifie si le joueur récuperre un bonus et si oui applique l'effet
+     */
     private void majBonus() {
         for (Bonus bonus : listeBonus) {
             if (bonus.getBounds().intersects(heros.getBounds())) {
-                
+
                 this.listeBonusAEnlever.add(bonus);
                 SwingUtilities.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         Monde.this.remove(bonus);
                     }
@@ -480,6 +540,7 @@ public class Monde extends JPanel {
                     case ZAPPER:
                         for (Ennemis ennemi : listeEnnemis) {
                             SwingUtilities.invokeLater(new Runnable() {
+                                @Override
                                 public void run() {
                                     Monde.this.remove(ennemi);
                                 }
@@ -499,6 +560,9 @@ public class Monde extends JPanel {
         listeBonus.removeAll(listeBonusAEnlever);
     }
 
+    /**
+     * Dessine le gazon
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

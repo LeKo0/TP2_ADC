@@ -17,9 +17,15 @@ import javax.swing.JComponent;
  */
 public abstract class Personnages extends JComponent {
 
+    /**
+     * Quatre directions possibles
+     */
     public enum Direction {
 
-        HAUT, BAS, DROITE, GAUCHE
+        HAUT,
+        BAS,
+        DROITE,
+        GAUCHE
     }
 
     protected final int vitesse;
@@ -33,7 +39,6 @@ public abstract class Personnages extends JComponent {
         this.imageDos = imageDos;
         this.imageDroite = imageDroite;
         this.imageGauche = imageGauche;
-  
 
         setSize(largeur, hauteur);
     }
@@ -56,8 +61,11 @@ public abstract class Personnages extends JComponent {
 
     public void setLastPosition(Point lastPosition) {
         this.lastPosition = lastPosition;
-    }   
-    
+    }
+
+    /**
+     * Déssine le personnage 
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.

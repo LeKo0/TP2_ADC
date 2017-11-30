@@ -15,10 +15,22 @@ import javax.swing.JComponent;
  */
 public abstract class Obstacles extends JComponent {
 
-    public static int HAUTEUR = 32, LARGEUR = 32;
+    public static int HAUTEUR = 32,
 
+    /**
+     *
+     */
+    LARGEUR = 32;
+
+    /**
+     *
+     */
     protected Image image;
 
+    /**
+     *
+     * @param image
+     */
     public Obstacles(Image image) {
         this.image = image;
         setSize(LARGEUR, HAUTEUR);

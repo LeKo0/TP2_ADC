@@ -16,8 +16,18 @@ import java.awt.Graphics;
  */
 public class Balle extends Projectiles {
 
-    public static int LARGEUR = 10, HAUTEUR = 10;
+    public static int LARGEUR = 10,
 
+    /**
+     *
+     */
+    HAUTEUR = 10;
+
+    /**
+     *
+     * @param deltaX
+     * @param deltaY
+     */
     public Balle(int deltaX, int deltaY) {
         super(deltaX, deltaY, LARGEUR, HAUTEUR);
     }

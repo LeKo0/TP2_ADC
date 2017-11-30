@@ -17,6 +17,9 @@ import javax.swing.ImageIcon;
  */
 public class Buisson extends Obstacles {
 
+    /**
+     *
+     */
     public Buisson() {
         super(Toolkit.getDefaultToolkit().getImage("images/buisson1.gif"));
     }

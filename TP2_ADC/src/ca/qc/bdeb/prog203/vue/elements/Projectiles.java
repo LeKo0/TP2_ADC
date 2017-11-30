@@ -5,15 +5,10 @@
  */
 package ca.qc.bdeb.prog203.vue.elements;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
 /**
- *
- * @author Leo
+ * Classe mère pour les projectiles
  */
 public abstract class Projectiles extends JComponent {
 
@@ -46,6 +41,9 @@ public abstract class Projectiles extends JComponent {
         return deltaY;
     }
 
+    /**
+     * Bouge le projectile en fonction de son delta et sa vitesse
+     */
     public void bouger() {
         setLocation(getX() + deltaX * vitesse, getY() + deltaY * vitesse);
     }

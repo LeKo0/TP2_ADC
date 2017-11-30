@@ -9,8 +9,7 @@ import java.awt.Image;
 import java.util.Random;
 
 /**
- *
- * @author Leo
+ * Classe mère pour les ennemis
  */
 public abstract class Ennemis extends Personnages {
 
@@ -18,7 +17,6 @@ public abstract class Ennemis extends Personnages {
     protected int points;
     protected Bonus bonus;
     protected int pointsDeVie;
-
 
     public Ennemis(int pointsDeVie, int points, int vitesse, Image imageFace, Image imageDos,
             Image imageDroite, Image imageGauche) {
@@ -31,6 +29,9 @@ public abstract class Ennemis extends Personnages {
 
     }
 
+    /**
+     * Initialise le bounus de l'ennemi 1 chance sur 15
+     */
     private void initBonus() {
         Random random = new Random();
         if (random.nextInt(15) == 0) {
@@ -39,8 +40,8 @@ public abstract class Ennemis extends Personnages {
             this.bonus = null;
         }
     }
-    
-    public Bonus getBonus(){
+
+    public Bonus getBonus() {
         return this.bonus;
     }
 
@@ -51,11 +52,5 @@ public abstract class Ennemis extends Personnages {
     public int getPointsDeVie() {
         return pointsDeVie;
     }
-    
-
-  
-
-    
-    
 
 }

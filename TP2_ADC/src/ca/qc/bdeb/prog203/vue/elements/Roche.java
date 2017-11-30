@@ -5,15 +5,10 @@
  */
 package ca.qc.bdeb.prog203.vue.elements;
 
-import java.awt.Image;
 import java.awt.Toolkit;
-import java.net.MalformedURLException;
-import java.net.URL;
-import javax.swing.ImageIcon;
 
 /**
- *
- * @author Leo
+ * Roche
  */
 public class Roche extends Obstacles {
 
