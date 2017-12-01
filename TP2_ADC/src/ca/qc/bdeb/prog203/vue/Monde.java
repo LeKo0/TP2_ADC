@@ -87,7 +87,7 @@ public class Monde extends JPanel {
      * Fait apparaitre une tentacule chauque 3000 ms sur un des cotés (choisi
      * aléatoirement)
      */
-    private final Timer spawm = new javax.swing.Timer(3000, new ActionListener() {
+    private final Timer spawm = new javax.swing.Timer(1000, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             Point position = new Point(0, 0);
@@ -118,7 +118,7 @@ public class Monde extends JPanel {
                     position.y = -Ennemis.HAUTEUR;
                     break;
                 case 3:
-                    position.x = (getWidth() / 2)  - (Ennemis.LARGEUR / 2);
+                    position.x = (getWidth() / 2) - (Ennemis.LARGEUR / 2);
                     position.y = getHeight() + Ennemis.HAUTEUR;
 
             }
@@ -392,9 +392,12 @@ public class Monde extends JPanel {
      */
     private void majProjectiles() {
         for (Projectiles projectile : listeProjectiles) {
-
-            projectile.bouger();
-
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    projectile.bouger();
+                }
+            });
             if (!this.getBounds().contains(projectile.getBounds())) {
                 listeProjectilesAEnlever.add(projectile);
             }
