@@ -122,7 +122,7 @@ public class Monde extends JPanel {
 
         for (Ennemis ennemi2 : listeEnnemis) {
 
-            if ((new Rectangle(position, heros.getSize()).intersects(ennemi2.getBounds()))) {
+            if ((new Rectangle(position, ennemi.getSize()).intersects(ennemi2.getBounds()))) {
                 canSpawn = false;
             }
         }
@@ -259,17 +259,19 @@ public class Monde extends JPanel {
     private void majJeu() {
 
         bougerHero();
-        majEnnemis();
-        majProjectiles();
-        majBonus();
-        majTirer();
-
         if (rotation_spawn == 0) {
             spawn();
             rotation_spawn = ROTATION_SPAWN;
         } else {
             rotation_spawn -= 1;
         }
+        
+        majEnnemis();
+        majProjectiles();
+        majBonus();
+        majTirer();
+
+        
 
     }
 
