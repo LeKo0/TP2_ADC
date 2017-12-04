@@ -46,10 +46,9 @@ public class Monde extends JPanel {
      * Deux types de projectiles
      */
     private enum typeProjectile {
-
         LASER, BALLE
     }
-
+    
     public static final Image IMAGE_GAZON1 = Toolkit.getDefaultToolkit().getImage("images/floor1.gif");
     public static final Image IMAGE_GAZON2 = Toolkit.getDefaultToolkit().getImage("images/floor2.gif");
     public static final int DIMENSION_GAZON = 32;

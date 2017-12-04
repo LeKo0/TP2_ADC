@@ -12,15 +12,15 @@ import java.util.Observable;
  * @author 1666876
  */
 public class ModeleADC extends Observable {
-    private int pointage;
-    private int pointsVie;
+    private int pointage = 0;
+    private int pointsVie = 3;
+    
+    
     
     /**
      *
      */
     public ModeleADC() {
-        this.pointage = 0;
-        this.pointsVie = 0;
     }
 
     /**

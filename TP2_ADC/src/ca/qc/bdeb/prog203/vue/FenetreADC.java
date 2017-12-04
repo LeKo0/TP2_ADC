@@ -8,6 +8,7 @@ package ca.qc.bdeb.prog203.vue;
 import ca.qc.bdeb.prog203.controlleur.ControlleurADC;
 import ca.qc.bdeb.prog203.modele.ModeleADC;
 import java.awt.BorderLayout;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
@@ -59,7 +60,7 @@ public class FenetreADC extends JFrame implements Observer {
 
     @Override//on doit update le chit des vies (comme ce qui est sous le jeu) ;)
     public void update(Observable o, Object arg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     /**
@@ -108,13 +109,16 @@ public class FenetreADC extends JFrame implements Observer {
         add(pnlMonde);
 
     }
-
+    
     /**
      * Créé une nouvelle partie
      */
     private void initPartie() {
 
     }
+
+    
+    
 
     /**
      * Initialise les evenements en lien avec le menu
