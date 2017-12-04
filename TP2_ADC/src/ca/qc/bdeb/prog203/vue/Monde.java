@@ -23,6 +23,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -65,68 +66,74 @@ public class Monde extends JPanel {
     private ArrayList<Ennemis> listeEnnemis = new ArrayList<>();
     private final ArrayList<Ennemis> listeEnnemisAEnlever = new ArrayList<>();
     private final ControlleurADC controlleur;
+    private int sleepingTime = 15;
+    private final int ROTATION_TIR = (int) 250 / sleepingTime;
+    private final int ROTATION_SPAWN = (int) 200 / sleepingTime;
+
+    private int rotation_tir = ROTATION_TIR;
+    private int rotation_spawn = ROTATION_SPAWN;
 
     private Random random = new Random();
-    /**
-     * Fait en sorte que le delais minimale entre deux tir est 250 ms
-     */
-    private final Timer cadenceDeTir = new javax.swing.Timer(250, new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent ae) {
-            switch (typeProjectile) {
-                case LASER:
-                    tirerLaser();
-                    break;
-                case BALLE:
-                    tirerBalle();
+
+    private void tir() {
+        switch (typeProjectile) {
+            case LASER:
+                tirerLaser();
+                break;
+            case BALLE:
+                tirerBalle();
+        }
+    }
+
+    private void spawn() {
+        Boolean canSpawn = true;
+        Point position = new Point(0, 0);
+        Ennemis ennemi = null;
+
+        switch (random.nextInt(3)) {
+            case 0:
+                ennemi = new TBleu();
+                break;
+            case 1:
+                ennemi = new TMauve();
+                break;
+            case 2:
+                ennemi = new TVert();
+                break;
+        }
+        switch (random.nextInt(4)) {
+            case 0:
+                position.x = -Ennemis.LARGEUR;
+                position.y = (getHeight() / 2) - (Ennemis.HAUTEUR / 2);
+                break;
+            case 1:
+                position.x = Ennemis.LARGEUR + getWidth();
+                position.y = (getHeight() / 2) - (Ennemis.HAUTEUR / 2);
+                break;
+            case 2:
+                position.x = (getWidth() / 2) - (Ennemis.LARGEUR / 2);
+                position.y = -Ennemis.HAUTEUR;
+                break;
+            case 3:
+                position.x = (getWidth() / 2) - (Ennemis.LARGEUR / 2);
+                position.y = getHeight() + Ennemis.HAUTEUR;
+
+        }
+
+        for (Ennemis ennemi2 : listeEnnemis) {
+
+            if ((new Rectangle(position, heros.getSize()).intersects(ennemi2.getBounds()))) {
+                canSpawn = false;
             }
         }
 
-    });
-    /**
-     * Fait apparaitre une tentacule chauque 3000 ms sur un des cotés (choisi
-     * aléatoirement)
-     */
-    private final Timer spawm = new javax.swing.Timer(1000, new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            Point position = new Point(0, 0);
-            Ennemis ennemi = null;
-
-            switch (random.nextInt(3)) {
-                case 0:
-                    listeEnnemis.add(ennemi = new TBleu());
-                    break;
-                case 1:
-                    listeEnnemis.add(ennemi = new TMauve());
-                    break;
-                case 2:
-                    listeEnnemis.add(ennemi = new TVert());
-                    break;
-            }
-            switch (random.nextInt(4)) {
-                case 0:
-                    position.x = -Ennemis.LARGEUR;
-                    position.y = (getHeight() / 2) - (Ennemis.HAUTEUR / 2);
-                    break;
-                case 1:
-                    position.x = Ennemis.LARGEUR + getWidth();
-                    position.y = (getHeight() / 2) - (Ennemis.HAUTEUR / 2);
-                    break;
-                case 2:
-                    position.x = (getWidth() / 2) - (Ennemis.LARGEUR / 2);
-                    position.y = -Ennemis.HAUTEUR;
-                    break;
-                case 3:
-                    position.x = (getWidth() / 2) - (Ennemis.LARGEUR / 2);
-                    position.y = getHeight() + Ennemis.HAUTEUR;
-
-            }
-
+        if (canSpawn) {
+            listeEnnemis.add(ennemi);
             ennemi.setLocation(position);
             Monde.this.add(ennemi, 0);
         }
-    });
+    }
+
     /**
      * Thread de jeu. Appelle la mise à jour du jeu et fait sleep le thread 15
      * ms
@@ -136,10 +143,11 @@ public class Monde extends JPanel {
         public void run() {
             while (true) {
                 majJeu();
+
                 invalidate();
                 repaint();
                 try {
-                    Thread.sleep(15);
+                    Thread.sleep(sleepingTime);
                 } catch (InterruptedException ex) {
                     invalidate();
                     repaint();
@@ -164,7 +172,6 @@ public class Monde extends JPanel {
         setLayout(null);
 
         typeProjectile = typeProjectile.LASER;
-        cadenceDeTir.setInitialDelay(0);
 
         initGraphiques();
         initPartie();
@@ -220,7 +227,6 @@ public class Monde extends JPanel {
     private void initPartie() {
         initEvenementsTouches();
         thread.start();
-        spawm.start();
 
     }
 
@@ -257,6 +263,13 @@ public class Monde extends JPanel {
         majProjectiles();
         majBonus();
         majTirer();
+
+        if (rotation_spawn == 0) {
+            spawn();
+            rotation_spawn = ROTATION_SPAWN;
+        } else {
+            rotation_spawn -= 1;
+        }
 
     }
 
@@ -323,9 +336,13 @@ public class Monde extends JPanel {
 
             if (heros.getX() < ennemi.getX()) {
                 vitesseX = -vitesseX;
+            }else if(heros.getX() >= ennemi.getX()-vitesseX && heros.getX() <= ennemi.getX() + vitesseX ){
+                vitesseX = 0;
             }
             if (heros.getY() < ennemi.getY()) {
                 vitesseY = -vitesseY;
+            }else if(heros.getY() >= ennemi.getY()-vitesseY && heros.getY() <= ennemi.getY() + vitesseY ){
+                vitesseY = 0;
             }
             ennemi.setLocation(ennemi.getX() + vitesseX, ennemi.getY());
 
@@ -372,18 +389,20 @@ public class Monde extends JPanel {
             if (dejaTouche && ennemi.getPointsDeVie() == 0) {
                 listeEnnemisAEnlever.add(ennemi);
             }
+
         }
-        for (Ennemis ennemi : listeEnnemisAEnlever) {
-            dropBonus(ennemi);
+        for (Ennemis ennemi2 : listeEnnemisAEnlever) {
+            dropBonus(ennemi2);
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    Monde.this.remove(ennemi);
+                    Monde.this.remove(ennemi2);
                 }
             });
         }
         listeEnnemis.removeAll(listeEnnemisAEnlever);
         listeEnnemisAEnlever.clear();
+
     }
 
     /**
@@ -392,12 +411,8 @@ public class Monde extends JPanel {
      */
     private void majProjectiles() {
         for (Projectiles projectile : listeProjectiles) {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    projectile.bouger();
-                }
-            });
+
+            projectile.bouger();
             if (!this.getBounds().contains(projectile.getBounds())) {
                 listeProjectilesAEnlever.add(projectile);
             }
@@ -426,13 +441,13 @@ public class Monde extends JPanel {
      * Déterminer si il faut tirer ou non
      */
     private void majTirer() {
-        if (listeKeyCodes.contains(KeyEvent.VK_SPACE)) {
-            if (!cadenceDeTir.isRunning()) {
-                cadenceDeTir.start();
+        if (rotation_tir == 0) {
+            if (listeKeyCodes.contains(KeyEvent.VK_SPACE)) {
+                tir();
             }
-        } else {
-            cadenceDeTir.stop();
+            rotation_tir = ROTATION_TIR;
         }
+        rotation_tir -= 1;
     }
 
     /**
@@ -457,9 +472,7 @@ public class Monde extends JPanel {
         }
         laserTemp.setLocation(heros.getLocation());
         listeProjectiles.add(laserTemp);
-
         add(laserTemp, 0);
-
     }
 
     /**
@@ -498,15 +511,10 @@ public class Monde extends JPanel {
             balle.setLocation(heros.getLocation());
             listeProjectiles.add(balle);
         }
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                add(ballesTemp[0], 0);
-                add(ballesTemp[1], 0);
-                add(ballesTemp[2], 0);
 
-            }
-        });
+        add(ballesTemp[0], 0);
+        add(ballesTemp[1], 0);
+        add(ballesTemp[2], 0);
 
     }
 
@@ -514,8 +522,11 @@ public class Monde extends JPanel {
 
         if (ennemi.getBonus() != null) {
             Bonus bonus = ennemi.getBonus();
+
             listeBonus.add(bonus);
+
             add(bonus, 0);
+
             bonus.setLocation(ennemi.getLocation());
 
         }
