@@ -7,10 +7,12 @@ package ca.qc.bdeb.prog203.vue;
 
 import ca.qc.bdeb.prog203.controlleur.ControlleurADC;
 import ca.qc.bdeb.prog203.modele.ModeleADC;
+import ca.qc.bdeb.prog203.vue.elements.Coeur;
 import java.awt.BorderLayout;
-import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JFrame;
@@ -31,8 +33,11 @@ public class FenetreADC extends JFrame implements Observer {
     private JMenu mnuFichier, mnuHelp;
     private JMenuItem mnuNouvellePartie, mnuQuitter, mnuAide, mnuAPropos;
     private Monde pnlMonde;
-    private JPanel pnlInfo;
+    private JPanel pnlInfo, pnlInfoDroite;
     private final ControlleurADC controlleur;
+    private final ModeleADC modele;
+    private JLabel lblPoints;
+    private ArrayList<Coeur> listeCoeur = new ArrayList<>();
 
     /**
      * Initialise toutes les composantes de la fenetre et donne le focus au
@@ -43,6 +48,7 @@ public class FenetreADC extends JFrame implements Observer {
      */
     public FenetreADC(ControlleurADC controlleur, ModeleADC modele) {
         this.controlleur = controlleur;
+        this.modele = modele;
         setTitle("Tantacule Mauve: La contre-attaque");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -60,6 +66,29 @@ public class FenetreADC extends JFrame implements Observer {
 
     @Override//on doit update le chit des vies (comme ce qui est sous le jeu) ;)
     public void update(Observable o, Object arg) {
+       
+        
+        switch(controlleur.getUpdate()){
+            case POINTS:
+                
+                
+                
+                
+                
+                break;
+            case RECOMMENCER:
+                
+                
+                
+                break;
+            case VIE:
+                
+                
+                break;
+            
+        }
+        
+        
         
     }
 
@@ -94,10 +123,21 @@ public class FenetreADC extends JFrame implements Observer {
      * le déroulement du jeux
      */
     private void initInfo() {
-
-        pnlInfo = new JPanel();
-        add(pnlInfo, BorderLayout.SOUTH);
-        pnlInfo.add(new JLabel("JPANEL INFO"));
+        lblPoints = new JLabel("Pointage = " + Integer.toString(modele.getPointage()));
+        
+        pnlInfo = new JPanel(new GridLayout(1, 0));
+        pnlInfo.add(lblPoints);
+        
+        
+        pnlInfoDroite = new JPanel(null);
+        for (int i = 0; i < modele.getPointsVie(); i++) {
+            listeCoeur.add(new Coeur());
+            pnlInfoDroite.add(listeCoeur.get(i));
+            listeCoeur.get(i).setLocation(2*i * listeCoeur.get(i).getWidth(), 0);
+        }
+        pnlInfo.add(pnlInfoDroite);
+        
+        add(pnlInfo, BorderLayout.NORTH);
 
     }
 
@@ -109,16 +149,13 @@ public class FenetreADC extends JFrame implements Observer {
         add(pnlMonde);
 
     }
-    
+
     /**
      * Créé une nouvelle partie
      */
     private void initPartie() {
 
     }
-
-    
-    
 
     /**
      * Initialise les evenements en lien avec le menu

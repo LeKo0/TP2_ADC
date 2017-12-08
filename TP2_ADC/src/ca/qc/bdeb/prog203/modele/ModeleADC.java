@@ -12,15 +12,23 @@ import java.util.Observable;
  * @author 1666876
  */
 public class ModeleADC extends Observable {
-    private int pointage = 0;
-    private int pointsVie = 3;
+    private int pointage;
+    private int pointsVie;
+    private final int INIT_VIE = 3;
     
     
+    public void recommencer(){
+        pointage = 0;
+        pointsVie = INIT_VIE;
+        majObserver();
+    }
     
     /**
      *
      */
     public ModeleADC() {
+        this.pointage = 0;
+        this.pointsVie = INIT_VIE;
     }
 
     /**
@@ -30,7 +38,10 @@ public class ModeleADC extends Observable {
     public int getPointage() {
         return pointage;
     }
-
+    public void setPointage(int points){
+        this.pointage = points;
+        majObserver();
+    }
     /**
      *
      * @return
@@ -53,6 +64,7 @@ public class ModeleADC extends Observable {
      */
     public void setPointsVie(int pointsVie) {
         this.pointsVie = pointsVie;
+        majObserver();
     }
     
     

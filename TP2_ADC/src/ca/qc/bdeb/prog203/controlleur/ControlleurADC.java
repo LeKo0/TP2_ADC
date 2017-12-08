@@ -17,11 +17,19 @@ public class ControlleurADC {
 
     private final ModeleADC modeleADC = new ModeleADC();
     private final FenetreADC fenetreADC = new FenetreADC(this,modeleADC);
-
+    private enum TypeUpdate{
+        POINTS, VIE, RECOMMENCER
+    };
+    private TypeUpdate update = null;
+    
     /**
      *
      */
     public ControlleurADC() {
+    }
+    
+    public TypeUpdate getUpdate(){
+        return update;
     }
     
     /**
@@ -40,15 +48,20 @@ public class ControlleurADC {
      *
      */
     public void heroToucher(){
+        update = TypeUpdate.VIE;
         modeleADC.setPointsVie(modeleADC.getPointsVie() - 1);
-        finDePartie(modeleADC.getPointsVie());
+        if (finDePartie(modeleADC.getPointsVie())){
+            update = TypeUpdate.RECOMMENCER;
+            modeleADC.recommencer();
+        }
     }
 
     /**
-     *
-     * @param ennemi
+     * 
+     * @param points 
      */
-    public void ennemiTuer(Ennemis ennemi){
-        
+    public void ennemiTuer(int points){
+        update = TypeUpdate.POINTS;
+        modeleADC.setPointage(modeleADC.getPointage() + points);
     }
 }
