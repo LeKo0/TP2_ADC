@@ -153,16 +153,16 @@ public class Monde extends JPanel {
                 } else {
                     switch (cote) {
                         case 0: //gauche
-                            position = new Point(position.x - ennemi.getWidth(), position.y);
+                            position = new Point(position.x - 2*ennemi.getWidth(), position.y);
                             break;
                         case 1: //droite
-                            position = new Point(position.x + ennemi.getWidth(), position.y);
+                            position = new Point(position.x + 2*ennemi.getWidth(), position.y);
                             break;
                         case 2: //haut
-                            position = new Point(position.x, position.y - ennemi.getHeight());
+                            position = new Point(position.x, position.y - 2*ennemi.getHeight());
                             break;
                         case 3: //bas
-                            position = new Point(position.x, position.y + ennemi.getHeight());
+                            position = new Point(position.x, position.y + 2*ennemi.getHeight());
 
                     }
                 }
@@ -526,6 +526,9 @@ public class Monde extends JPanel {
         controlleur.recommencer();
     }
 
+    /**
+     * Demande au joueur si il veux recommencer
+     */
     public void gameEnd() {
         String[] choices = {"Recommencer", "Quitter le jeu"};
         String input = (String) JOptionPane.showInputDialog(this, "Votre partie est terminé. Veuillez choisir ce que vous voulez faire. \n Si vous appuyer sur le X ou sur cancel cela sera considéré comme étant vouloir partir", "Fin de Partie", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);

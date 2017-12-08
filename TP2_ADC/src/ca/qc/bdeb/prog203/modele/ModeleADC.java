@@ -12,19 +12,13 @@ import java.util.Observable;
  * @author 1666876
  */
 public class ModeleADC extends Observable {
+
     private int pointage;
     private int pointsVie;
     public static int INIT_VIE = 3;
-    
-    
-    public void recommencer(){
-        pointage = 0;
-        pointsVie = INIT_VIE;
-        majObserver();
-    }
-    
+
     /**
-     *
+     * Constructeur par défaut
      */
     public ModeleADC() {
         this.pointage = 0;
@@ -32,40 +26,38 @@ public class ModeleADC extends Observable {
     }
 
     /**
-     *
-     * @return
+     * Réinitialise la vie du joueur
      */
+    public void recommencer() {
+        pointage = 0;
+        pointsVie = INIT_VIE;
+        majObserver();
+    }
+
     public int getPointage() {
         return pointage;
     }
-    public void setPointage(int pointage){
+
+    public void setPointage(int pointage) {
         this.pointage = pointage;
         majObserver();
     }
-    /**
-     *
-     * @return
-     */
+
     public int getPointsVie() {
         return pointsVie;
     }
-    
+
     /**
-     *
+     * Met à jour les observateurs
      */
-    public void majObserver(){
+    public void majObserver() {
         setChanged();
         notifyObservers();
     }
 
-    /**
-     *
-     * @param pointsVie
-     */
     public void setPointsVie(int pointsVie) {
         this.pointsVie = pointsVie;
         majObserver();
     }
-    
-    
+
 }

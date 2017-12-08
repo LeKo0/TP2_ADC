@@ -16,54 +16,64 @@ public class ControlleurADC {
 
     private final ModeleADC modeleADC = new ModeleADC();
     private final FenetreADC fenetreADC = new FenetreADC(this, modeleADC);
-    public enum TypeUpdate{
+
+    /**
+     * Type d'updates
+     */
+    public enum TypeUpdate {
         POINTS, VIE, RECOMMENCER, RESET_VIE
     };
     private TypeUpdate update = null;
-    
+
     /**
-     *
+     * Constructeur par défaut
      */
     public ControlleurADC() {
     }
-    
-    public TypeUpdate getUpdate(){
+
+    public TypeUpdate getUpdate() {
         return update;
     }
-    
+
     /**
+     * Détecte la fin du jeu
      *
      * @param vie
      * @return
      */
-    public boolean finDePartie(int vie){
-        if (vie <= 0){
-            return true;
-        }
-        return false;
+    public boolean finDePartie(int vie) {
+        return vie <= 0;
     }
-    
-    public void resetVie(){
+
+    /**
+     * Redonne toute sa vie au joueur
+     */
+    public void resetVie() {
         update = TypeUpdate.RESET_VIE;
         modeleADC.setPointsVie(ModeleADC.INIT_VIE);
     }
-    
+
     /**
-     *
+     * Enlève un point de vie au héro
      */
-    public void heroToucher(){
+    public void heroToucher() {
         update = TypeUpdate.VIE;
         modeleADC.setPointsVie(modeleADC.getPointsVie() - 1);
     }
-    public void recommencer(){
+
+    /**
+     * Recommence la partie
+     */
+    public void recommencer() {
         update = TypeUpdate.RECOMMENCER;
         modeleADC.recommencer();
     }
+
     /**
-     * 
-     * @param points 
+     * Donne des points au joueur
+     * @param points
      */
-    public void augmenterPoints(int points){
+    public void augmenterPoints(int points) {
         update = TypeUpdate.POINTS;
         modeleADC.setPointage(modeleADC.getPointage() + points);
     }

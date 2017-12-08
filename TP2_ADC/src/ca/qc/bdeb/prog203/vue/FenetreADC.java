@@ -66,7 +66,10 @@ public class FenetreADC extends JFrame implements Observer {
 
     }
 
-    @Override//on doit update le chit des vies (comme ce qui est sous le jeu) ;)
+    /**
+     * Update l'état du jeu selon l'état de TypeUpdate
+     */
+    @Override
     public void update(Observable o, Object arg) {
 
         switch (controlleur.getUpdate()) {
