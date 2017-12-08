@@ -17,13 +17,9 @@ import javax.swing.JComponent;
  */
 public class Bonus extends JComponent {
 
+    private int points = 5;
     private Random random;
-    public static int HAUTEUR = 32,
-
-    /**
-     *
-     */
-    LARGEUR = 32;
+    public static int HAUTEUR = 32, LARGEUR = 32;
     private Image[] images = {
         Toolkit.getDefaultToolkit().getImage("images/boni4.gif"),
         Toolkit.getDefaultToolkit().getImage("images/boni5.gif"),
@@ -38,12 +34,10 @@ public class Bonus extends JComponent {
          *
          */
         BALLES,
-
         /**
          *
          */
         ZAPPER,
-
         /**
          *
          */
@@ -58,6 +52,7 @@ public class Bonus extends JComponent {
     public Bonus() {
         setSize(HAUTEUR, LARGEUR);
         initType();
+
     }
 
     private void initType() {
@@ -74,6 +69,10 @@ public class Bonus extends JComponent {
                 this.type = Type.BOOST;
         }
 
+    }
+
+    public int getPoints() {
+        return points;
     }
 
     /**

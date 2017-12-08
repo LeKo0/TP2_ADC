@@ -68,12 +68,13 @@ public class Monde extends JPanel {
     private final ControlleurADC controlleur;
     private final ModeleADC modele;
     private int sleepingTime = 15;
-    private final int ROTATION_TIR = (int) 250 / sleepingTime;
-    private final int ROTATION_SPAWN = (int) 200 / sleepingTime;
+    private int rotationTirActuel = (int) 200 / sleepingTime;
+    private int rotationSpawnActuel = (int) 3000 / sleepingTime;
     private boolean gameOn = true;
 
-    private int rotation_tir = ROTATION_TIR;
-    private int rotation_spawn = ROTATION_SPAWN;
+    private int rotation_tir = rotationTirActuel;
+    private int rotation_spawn = rotationSpawnActuel;
+    private int niveau = 1;
 
     private Random random = new Random();
 
@@ -88,51 +89,85 @@ public class Monde extends JPanel {
     }
 
     private void spawn() {
-        Boolean canSpawn = true;
-        Point position = new Point(0, 0);
-        Ennemis ennemi = null;
 
-        switch (random.nextInt(3)) {
-            case 0:
-                ennemi = new TBleu();
-                break;
-            case 1:
-                ennemi = new TMauve();
-                break;
-            case 2:
+        int cote = random.nextInt(4);
+        Boolean canSpawn;
+        Point position;
+        Ennemis ennemi;
+        for (int i = 0; i < Math.ceil(niveau / 2.0); i++) {
+
+            position = new Point();
+            ennemi = null;
+
+            if (niveau <= 3) {
                 ennemi = new TVert();
-                break;
-        }
-        switch (random.nextInt(4)) {
-            case 0:
-                position.x = -Ennemis.LARGEUR;
-                position.y = (getHeight() / 2) - (Ennemis.HAUTEUR / 2);
-                break;
-            case 1:
-                position.x = Ennemis.LARGEUR + getWidth();
-                position.y = (getHeight() / 2) - (Ennemis.HAUTEUR / 2);
-                break;
-            case 2:
-                position.x = (getWidth() / 2) - (Ennemis.LARGEUR / 2);
-                position.y = -Ennemis.HAUTEUR;
-                break;
-            case 3:
-                position.x = (getWidth() / 2) - (Ennemis.LARGEUR / 2);
-                position.y = getHeight() + Ennemis.HAUTEUR;
+            } else if (niveau <= 6) {
+                switch (random.nextInt(2)) {
+                    case 0:
+                        ennemi = new TBleu();
+                        break;
+                    case 1:
+                        ennemi = new TVert();
 
-        }
-
-        for (Ennemis ennemi2 : listeEnnemis) {
-
-            if ((new Rectangle(position, ennemi.getSize()).intersects(ennemi2.getBounds()))) {
-                canSpawn = false;
+                }
+            } else {
+                switch (random.nextInt(3)) {
+                    case 0:
+                        ennemi = new TBleu();
+                        break;
+                    case 1:
+                        ennemi = new TMauve();
+                        break;
+                    case 2:
+                        ennemi = new TVert();
+                        break;
+                }
             }
-        }
+            switch (cote) {
+                case 0: //gauche
+                    position.setLocation(-Ennemis.LARGEUR, (getHeight() / 2) - (Ennemis.HAUTEUR / 2) + (random.nextInt(4 * DIMENSION_GAZON) - 2 * DIMENSION_GAZON));
+                    break;
+                case 1: //droite
+                    position.setLocation(Ennemis.LARGEUR + getWidth(), (getHeight() / 2) - (Ennemis.HAUTEUR / 2) + (random.nextInt(4 * DIMENSION_GAZON) - 2 * DIMENSION_GAZON));
+                    break;
+                case 2: //haut
+                    position.setLocation((getWidth() / 2) - (Ennemis.LARGEUR / 2) + (random.nextInt(4 * DIMENSION_GAZON) - 2 * DIMENSION_GAZON), -Ennemis.HAUTEUR);
+                    break;
+                case 3: //bas
+                    position.setLocation((getWidth() / 2) - (Ennemis.LARGEUR / 2) + (random.nextInt(4 * DIMENSION_GAZON) - 2 * DIMENSION_GAZON), getHeight() + Ennemis.HAUTEUR);
 
-        if (canSpawn) {
-            listeEnnemis.add(ennemi);
-            ennemi.setLocation(position);
-            Monde.this.add(ennemi, 0);
+            }
+
+            do {
+                canSpawn = true;
+                for (Ennemis ennemi2 : listeEnnemis) {
+                    if ((new Rectangle(position, ennemi.getSize()).intersects(ennemi2.getBounds()))) {
+                        canSpawn = false;
+                    }
+                }
+
+                if (canSpawn) {
+                    listeEnnemis.add(ennemi);
+                    ennemi.setLocation(position);
+                    Monde.this.add(ennemi, 0);
+                } else {
+                    switch (cote) {
+                        case 0: //gauche
+                            position = new Point(position.x - ennemi.getWidth(), position.y);
+                            break;
+                        case 1: //droite
+                            position = new Point(position.x + ennemi.getWidth(), position.y);
+                            break;
+                        case 2: //haut
+                            position = new Point(position.x, position.y - ennemi.getHeight());
+                            break;
+                        case 3: //bas
+                            position = new Point(position.x, position.y + ennemi.getHeight());
+
+                    }
+                }
+            } while (!canSpawn);
+
         }
     }
 
@@ -146,7 +181,6 @@ public class Monde extends JPanel {
             while (true) {
                 while (gameOn) {
                     majJeu();
-
                     invalidate();
                     repaint();
                     try {
@@ -263,8 +297,11 @@ public class Monde extends JPanel {
 
         bougerHero();
         if (rotation_spawn == 0) {
+            System.out.println(niveau);
             spawn();
-            rotation_spawn = ROTATION_SPAWN;
+            niveau++;
+            rotation_spawn = rotationSpawnActuel;
+
         } else {
             rotation_spawn -= 1;
         }
@@ -404,7 +441,7 @@ public class Monde extends JPanel {
                 @Override
                 public void run() {
                     Monde.this.remove(ennemi2);
-                    controlleur.ennemiTuer(ennemi2.getPoints());
+                    controlleur.augmenterPoints(ennemi2.getPoints());
                 }
             });
         }
@@ -445,7 +482,11 @@ public class Monde extends JPanel {
 
     }
 
+    /**
+     * Réinitialise l'état du jeu afin de pouvoir recommencer la partie
+     */
     public void reset() {
+        niveau = 0;
         listeKeyCodes.clear();
         for (Bonus temp : listeBonus) {
             SwingUtilities.invokeLater(new Runnable() {
@@ -504,7 +545,7 @@ public class Monde extends JPanel {
             if (listeKeyCodes.contains(KeyEvent.VK_SPACE)) {
                 tir();
             }
-            rotation_tir = ROTATION_TIR;
+            rotation_tir = rotationTirActuel;
         }
         rotation_tir -= 1;
     }
@@ -598,6 +639,7 @@ public class Monde extends JPanel {
         for (Bonus bonus : listeBonus) {
             if (bonus.getBounds().intersects(heros.getBounds())) {
 
+                controlleur.augmenterPoints(bonus.getPoints());
                 this.listeBonusAEnlever.add(bonus);
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
@@ -624,7 +666,7 @@ public class Monde extends JPanel {
 
                         break;
                     default: //case BOOST:
-                    //Mettre points de vie max
+                        controlleur.resetVie();
 
                 }
 

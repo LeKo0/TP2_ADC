@@ -14,7 +14,7 @@ import java.util.Observable;
 public class ModeleADC extends Observable {
     private int pointage;
     private int pointsVie;
-    private final int INIT_VIE = 3;
+    public static int INIT_VIE = 3;
     
     
     public void recommencer(){

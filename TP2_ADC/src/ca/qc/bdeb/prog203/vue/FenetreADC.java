@@ -90,11 +90,24 @@ public class FenetreADC extends JFrame implements Observer {
                 pnlInfoDroite.repaint();
                 break;
             case VIE:
+
                 pnlInfoDroite.remove(listeCoeur.get(listeCoeur.size() - 1));
                 listeCoeur.remove(listeCoeur.size() - 1);
                 pnlInfoDroite.invalidate();
                 pnlInfoDroite.repaint();
                 break;
+            case RESET_VIE:
+                //On enlève tout les coeurs
+                for (Coeur coeur : listeCoeur) {
+                    pnlInfoDroite.remove(coeur);
+                }
+                listeCoeur.clear();
+                //On remet tout les coeurs
+                for (int i = 0; i < modele.getPointsVie(); i++) {
+                    listeCoeur.add(new Coeur());
+                    pnlInfoDroite.add(listeCoeur.get(i));
+                    listeCoeur.get(i).setLocation(2 * i * listeCoeur.get(i).getWidth(), 0);
+                }
 
         }
     }
