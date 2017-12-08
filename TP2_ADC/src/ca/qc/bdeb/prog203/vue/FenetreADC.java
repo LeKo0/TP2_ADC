@@ -76,6 +76,11 @@ public class FenetreADC extends JFrame implements Observer {
             case RECOMMENCER:
                 lblPoints.setText("Pointage = " + Integer.toString(modele.getPointage()));
 
+                for (Coeur temp : listeCoeur) {
+                    pnlInfoDroite.remove(temp);
+                }
+                listeCoeur.clear();
+
                 for (int i = 0; i < modele.getPointsVie(); i++) {
                     listeCoeur.add(new Coeur());
                     pnlInfoDroite.add(listeCoeur.get(i));
@@ -131,6 +136,7 @@ public class FenetreADC extends JFrame implements Observer {
         pnlInfo.add(lblPoints);
 
         pnlInfoDroite = new JPanel(null);
+
         for (int i = 0; i < modele.getPointsVie(); i++) {
             listeCoeur.add(new Coeur());
             pnlInfoDroite.add(listeCoeur.get(i));
@@ -155,7 +161,7 @@ public class FenetreADC extends JFrame implements Observer {
      * Créé une nouvelle partie
      */
     private void initPartie() {
-        
+        pnlMonde.reset();
     }
 
     /**
@@ -179,13 +185,17 @@ public class FenetreADC extends JFrame implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //à terminer
-                JOptionPane.showMessageDialog(FenetreADC.this, "--Insérer message--", "Règles du jeu", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(FenetreADC.this, "Ce jeu est un jeu où des aliens vont sortir aléatoirement des ouvertures à vos coins et vous devez les tués."
+                        + "\n En les tuant, vous allez gagner des points et le but du jeu est de ramaassé le plus de points possibles."
+                        + "\n Si vous vous faites toucher par un alien vous perdez une vie et vous n'en n'avez que trois, alors faites attention!"
+                        + "\n Finalement, certains aliens font tomber un pouvoir lorsqu'ils meurent, alors vous pouvez les récupérer en allant dessus."
+                        + "\n Bonne chance!", "Règles du jeu", JOptionPane.INFORMATION_MESSAGE);
             }
         });
         mnuAPropos.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(FenetreADC.this, "--Insérer message--", "À propos", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(FenetreADC.this, "Les noms des programmeurs sont Souleiman Ayoub et Léo Gagnon et cela est à remettre pour le 8 décembre 2017", "À propos", JOptionPane.INFORMATION_MESSAGE);
 
             }
         });

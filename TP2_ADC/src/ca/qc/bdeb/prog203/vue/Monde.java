@@ -36,7 +36,6 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 
 /**
  *
@@ -135,10 +134,6 @@ public class Monde extends JPanel {
             ennemi.setLocation(position);
             Monde.this.add(ennemi, 0);
         }
-    }
-
-    public void stopingThread() {
-        gameOn = false;
     }
 
     /**
@@ -450,35 +445,53 @@ public class Monde extends JPanel {
 
     }
 
+    public void reset() {
+        listeKeyCodes.clear();
+        for (Bonus temp : listeBonus) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    Monde.this.remove(temp);
+                }
+            });
+        }
+        listeBonus.clear();
+        listeBonusAEnlever.clear();
+        for (Projectiles temp : listeProjectiles) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    Monde.this.remove(temp);
+                }
+            });
+        }
+        listeProjectiles.clear();
+        listeProjectilesAEnlever.clear();
+        for (Ennemis temp : listeEnnemis) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    Monde.this.remove(temp);
+                }
+            });
+        }
+        listeEnnemis.clear();
+        listeEnnemisAEnlever.clear();
+        typeProjectile = typeProjectile.LASER;
+        this.invalidate();
+        this.repaint();
+        heros.setLocation(8 * DIMENSION_GAZON - 11, 7 * DIMENSION_GAZON - 25);
+        gameOn = true;
+        controlleur.recommencer();
+    }
+
     public void gameEnd() {
         String[] choices = {"Recommencer", "Quitter le jeu"};
         String input = (String) JOptionPane.showInputDialog(this, "Votre partie est terminé. Veuillez choisir ce que vous voulez faire. \n Si vous appuyer sur le X ou sur cancel cela sera considéré comme étant vouloir partir", "Fin de Partie", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
         if (input == null || input.equals(choices[1])) {
             System.exit(0);
         } else {
-            listeKeyCodes.clear();
-            for (Bonus temp : listeBonus) {
-                Monde.this.remove(temp);
-            }
-            listeBonus.clear();
-            listeBonusAEnlever.clear();
-            for (Projectiles temp : listeProjectiles) {
-                Monde.this.remove(temp);
-            }
-            listeProjectiles.clear();
-            listeProjectilesAEnlever.clear();
-            for (Ennemis temp : listeEnnemis) {
-                this.remove(temp);
-            }
-            listeEnnemis.clear();
-            listeEnnemisAEnlever.clear();
-            typeProjectile = typeProjectile.LASER;
-            this.invalidate();
-            this.repaint();
-            heros.setLocation(8 * DIMENSION_GAZON - 11, 7 * DIMENSION_GAZON - 25);
-            gameOn = true;
-            controlleur.recommencer();
-
+            reset();
         }
 
     }
