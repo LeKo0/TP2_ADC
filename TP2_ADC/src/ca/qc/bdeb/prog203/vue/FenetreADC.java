@@ -49,6 +49,8 @@ public class FenetreADC extends JFrame implements Observer {
     public FenetreADC(ControlleurADC controlleur, ModeleADC modele) {
         this.controlleur = controlleur;
         this.modele = modele;
+        modele.addObserver(this);
+        
         setTitle("Tantacule Mauve: La contre-attaque");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -66,15 +68,10 @@ public class FenetreADC extends JFrame implements Observer {
 
     @Override//on doit update le chit des vies (comme ce qui est sous le jeu) ;)
     public void update(Observable o, Object arg) {
-       
         
         switch(controlleur.getUpdate()){
             case POINTS:
-                
-                
-                
-                
-                
+                lblPoints.setText("Pointage = " + Integer.toString(modele.getPointage()));
                 break;
             case RECOMMENCER:
                 

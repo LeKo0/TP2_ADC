@@ -398,6 +398,7 @@ public class Monde extends JPanel {
                 @Override
                 public void run() {
                     Monde.this.remove(ennemi2);
+                    controlleur.ennemiTuer(ennemi2.getPoints());
                 }
             });
         }

@@ -52,5 +52,8 @@ public abstract class Ennemis extends Personnages {
     public int getPointsDeVie() {
         return pointsDeVie;
     }
+    public int getPoints(){
+        return points;
+    }
 
 }

@@ -16,8 +16,8 @@ import ca.qc.bdeb.prog203.vue.elements.Ennemis;
 public class ControlleurADC {
 
     private final ModeleADC modeleADC = new ModeleADC();
-    private final FenetreADC fenetreADC = new FenetreADC(this,modeleADC);
-    private enum TypeUpdate{
+    private final FenetreADC fenetreADC = new FenetreADC(this, modeleADC);
+    public enum TypeUpdate{
         POINTS, VIE, RECOMMENCER
     };
     private TypeUpdate update = null;

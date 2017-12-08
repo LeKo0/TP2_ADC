@@ -39,7 +39,7 @@ public class ModeleADC extends Observable {
         return pointage;
     }
     public void setPointage(int points){
-        this.pointage = points;
+        this.pointage += points;
         majObserver();
     }
     /**
