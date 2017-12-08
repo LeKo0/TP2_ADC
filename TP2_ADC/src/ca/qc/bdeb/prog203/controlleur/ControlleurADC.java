@@ -38,7 +38,7 @@ public class ControlleurADC {
      * @return
      */
     public boolean finDePartie(int vie){
-        if (vie >= 0){
+        if (vie <= 0){
             return true;
         }
         return false;
@@ -50,12 +50,11 @@ public class ControlleurADC {
     public void heroToucher(){
         update = TypeUpdate.VIE;
         modeleADC.setPointsVie(modeleADC.getPointsVie() - 1);
-        if (finDePartie(modeleADC.getPointsVie())){
-            update = TypeUpdate.RECOMMENCER;
-            modeleADC.recommencer();
-        }
     }
-
+    public void recommencer(){
+        update = TypeUpdate.RECOMMENCER;
+        modeleADC.recommencer();
+    }
     /**
      * 
      * @param points 

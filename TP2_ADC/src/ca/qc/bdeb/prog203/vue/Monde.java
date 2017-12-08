@@ -6,6 +6,7 @@
 package ca.qc.bdeb.prog203.vue;
 
 import ca.qc.bdeb.prog203.controlleur.ControlleurADC;
+import ca.qc.bdeb.prog203.modele.ModeleADC;
 import ca.qc.bdeb.prog203.vue.elements.Balle;
 import ca.qc.bdeb.prog203.vue.elements.Bonus;
 import ca.qc.bdeb.prog203.vue.elements.Buisson;
@@ -32,6 +33,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
@@ -48,7 +50,7 @@ public class Monde extends JPanel {
     private enum typeProjectile {
         LASER, BALLE
     }
-    
+
     public static final Image IMAGE_GAZON1 = Toolkit.getDefaultToolkit().getImage("images/floor1.gif");
     public static final Image IMAGE_GAZON2 = Toolkit.getDefaultToolkit().getImage("images/floor2.gif");
     public static final int DIMENSION_GAZON = 32;
@@ -65,9 +67,11 @@ public class Monde extends JPanel {
     private ArrayList<Ennemis> listeEnnemis = new ArrayList<>();
     private final ArrayList<Ennemis> listeEnnemisAEnlever = new ArrayList<>();
     private final ControlleurADC controlleur;
+    private final ModeleADC modele;
     private int sleepingTime = 15;
     private final int ROTATION_TIR = (int) 250 / sleepingTime;
     private final int ROTATION_SPAWN = (int) 200 / sleepingTime;
+    private boolean gameOn = true;
 
     private int rotation_tir = ROTATION_TIR;
     private int rotation_spawn = ROTATION_SPAWN;
@@ -133,6 +137,10 @@ public class Monde extends JPanel {
         }
     }
 
+    public void stopingThread() {
+        gameOn = false;
+    }
+
     /**
      * Thread de jeu. Appelle la mise à jour du jeu et fait sleep le thread 15
      * ms
@@ -141,19 +149,20 @@ public class Monde extends JPanel {
         @Override
         public void run() {
             while (true) {
-                majJeu();
+                while (gameOn) {
+                    majJeu();
 
-                invalidate();
-                repaint();
-                try {
-                    Thread.sleep(sleepingTime);
-                } catch (InterruptedException ex) {
                     invalidate();
                     repaint();
+                    try {
+                        Thread.sleep(sleepingTime);
+                    } catch (InterruptedException ex) {
+                        invalidate();
+                        repaint();
+                    }
                 }
-
+                gameEnd();
             }
-
         }
 
     };
@@ -164,9 +173,9 @@ public class Monde extends JPanel {
      *
      * @param controlleur Controlleur du jeu
      */
-    public Monde(ControlleurADC controlleur) {
+    public Monde(ControlleurADC controlleur, ModeleADC modele) {
         this.controlleur = controlleur;
-
+        this.modele = modele;
         setPreferredSize(new Dimension(HAUTEUR * DIMENSION_GAZON, LARGEUR * DIMENSION_GAZON));
         setLayout(null);
 
@@ -264,13 +273,11 @@ public class Monde extends JPanel {
         } else {
             rotation_spawn -= 1;
         }
-        
+
         majEnnemis();
         majProjectiles();
         majBonus();
         majTirer();
-
-        
 
     }
 
@@ -337,12 +344,12 @@ public class Monde extends JPanel {
 
             if (heros.getX() < ennemi.getX()) {
                 vitesseX = -vitesseX;
-            }else if(heros.getX() >= ennemi.getX()-vitesseX && heros.getX() <= ennemi.getX() + vitesseX ){
+            } else if (heros.getX() >= ennemi.getX() - vitesseX && heros.getX() <= ennemi.getX() + vitesseX) {
                 vitesseX = 0;
             }
             if (heros.getY() < ennemi.getY()) {
                 vitesseY = -vitesseY;
-            }else if(heros.getY() >= ennemi.getY()-vitesseY && heros.getY() <= ennemi.getY() + vitesseY ){
+            } else if (heros.getY() >= ennemi.getY() - vitesseY && heros.getY() <= ennemi.getY() + vitesseY) {
                 vitesseY = 0;
             }
             ennemi.setLocation(ennemi.getX() + vitesseX, ennemi.getY());
@@ -383,6 +390,10 @@ public class Monde extends JPanel {
 
             if (ennemi.getBounds().intersects(heros.getBounds()) && !dejaTouche) {
                 controlleur.heroToucher();
+                if (controlleur.finDePartie(modele.getPointsVie())) {
+                    gameOn = false;
+                }
+
                 ennemi.setPointsDeVie(0);
                 dejaTouche = true;
             }
@@ -436,6 +447,39 @@ public class Monde extends JPanel {
         }
         listeProjectiles.removeAll(listeProjectilesAEnlever);
         listeProjectilesAEnlever.clear();
+
+    }
+
+    public void gameEnd() {
+        String[] choices = {"Recommencer", "Quitter le jeu"};
+        String input = (String) JOptionPane.showInputDialog(this, "Votre partie est terminé. Veuillez choisir ce que vous voulez faire. \n Si vous appuyer sur le X ou sur cancel cela sera considéré comme étant vouloir partir", "Fin de Partie", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+        if (input == null || input.equals(choices[1])) {
+            System.exit(0);
+        } else {
+            listeKeyCodes.clear();
+            for (Bonus temp : listeBonus) {
+                Monde.this.remove(temp);
+            }
+            listeBonus.clear();
+            listeBonusAEnlever.clear();
+            for (Projectiles temp : listeProjectiles) {
+                Monde.this.remove(temp);
+            }
+            listeProjectiles.clear();
+            listeProjectilesAEnlever.clear();
+            for (Ennemis temp : listeEnnemis) {
+                this.remove(temp);
+            }
+            listeEnnemis.clear();
+            listeEnnemisAEnlever.clear();
+            typeProjectile = typeProjectile.LASER;
+            this.invalidate();
+            this.repaint();
+            heros.setLocation(8 * DIMENSION_GAZON - 11, 7 * DIMENSION_GAZON - 25);
+            gameOn = true;
+            controlleur.recommencer();
+
+        }
 
     }
 

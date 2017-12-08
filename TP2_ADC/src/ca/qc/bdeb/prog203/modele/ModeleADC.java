@@ -38,8 +38,8 @@ public class ModeleADC extends Observable {
     public int getPointage() {
         return pointage;
     }
-    public void setPointage(int points){
-        this.pointage += points;
+    public void setPointage(int pointage){
+        this.pointage = pointage;
         majObserver();
     }
     /**

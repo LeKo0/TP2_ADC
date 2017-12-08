@@ -50,7 +50,7 @@ public class FenetreADC extends JFrame implements Observer {
         this.controlleur = controlleur;
         this.modele = modele;
         modele.addObserver(this);
-        
+
         setTitle("Tantacule Mauve: La contre-attaque");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -68,25 +68,30 @@ public class FenetreADC extends JFrame implements Observer {
 
     @Override//on doit update le chit des vies (comme ce qui est sous le jeu) ;)
     public void update(Observable o, Object arg) {
-        
-        switch(controlleur.getUpdate()){
+
+        switch (controlleur.getUpdate()) {
             case POINTS:
                 lblPoints.setText("Pointage = " + Integer.toString(modele.getPointage()));
                 break;
             case RECOMMENCER:
-                
-                
-                
+                lblPoints.setText("Pointage = " + Integer.toString(modele.getPointage()));
+
+                for (int i = 0; i < modele.getPointsVie(); i++) {
+                    listeCoeur.add(new Coeur());
+                    pnlInfoDroite.add(listeCoeur.get(i));
+                    listeCoeur.get(i).setLocation(2 * i * listeCoeur.get(i).getWidth(), 0);
+                }
+                pnlInfoDroite.invalidate();
+                pnlInfoDroite.repaint();
                 break;
             case VIE:
-                
-                
+                pnlInfoDroite.remove(listeCoeur.get(listeCoeur.size() - 1));
+                listeCoeur.remove(listeCoeur.size() - 1);
+                pnlInfoDroite.invalidate();
+                pnlInfoDroite.repaint();
                 break;
-            
+
         }
-        
-        
-        
     }
 
     /**
@@ -121,19 +126,18 @@ public class FenetreADC extends JFrame implements Observer {
      */
     private void initInfo() {
         lblPoints = new JLabel("Pointage = " + Integer.toString(modele.getPointage()));
-        
+
         pnlInfo = new JPanel(new GridLayout(1, 0));
         pnlInfo.add(lblPoints);
-        
-        
+
         pnlInfoDroite = new JPanel(null);
         for (int i = 0; i < modele.getPointsVie(); i++) {
             listeCoeur.add(new Coeur());
             pnlInfoDroite.add(listeCoeur.get(i));
-            listeCoeur.get(i).setLocation(2*i * listeCoeur.get(i).getWidth(), 0);
+            listeCoeur.get(i).setLocation(2 * i * listeCoeur.get(i).getWidth(), 0);
         }
         pnlInfo.add(pnlInfoDroite);
-        
+
         add(pnlInfo, BorderLayout.NORTH);
 
     }
@@ -142,7 +146,7 @@ public class FenetreADC extends JFrame implements Observer {
      * Initialise le monde
      */
     private void initMonde() {
-        pnlMonde = new Monde(controlleur);
+        pnlMonde = new Monde(controlleur, modele);
         add(pnlMonde);
 
     }
@@ -151,7 +155,7 @@ public class FenetreADC extends JFrame implements Observer {
      * Créé une nouvelle partie
      */
     private void initPartie() {
-
+        
     }
 
     /**
