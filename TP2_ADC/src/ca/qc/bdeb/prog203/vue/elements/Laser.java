@@ -14,15 +14,10 @@ import java.awt.Graphics;
  */
 public class Laser extends Projectiles {
 
-    public static int LARGEUR = 20,
+    public static final int LARGEUR = 20,HAUTEUR = 5;
 
     /**
-     *
-     */
-    HAUTEUR = 5;
-
-    /**
-     *
+     * Initialise le laser avec sa direction
      * @param deltaX
      * @param deltaY
      */
@@ -32,6 +27,10 @@ public class Laser extends Projectiles {
 
     }
 
+    /**
+     * Dessine le lase
+     * @param g 
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

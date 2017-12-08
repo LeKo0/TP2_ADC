@@ -28,7 +28,7 @@ public abstract class Personnages extends JComponent {
         GAUCHE
     }
 
-    protected final int vitesse;
+    protected int vitesse;
     protected Image imageFace, imageDos, imageDroite, imageGauche;
     protected Direction direction = Direction.DROITE; //Direction par default
     protected Point lastPosition = new Point();
