@@ -15,11 +15,16 @@ import javax.swing.JComponent;
  * @author souleiman
  */
 public class Coeur extends JComponent{
-    private Image img = Toolkit.getDefaultToolkit().getImage("images/coeur.gif");
+    private final Image img = Toolkit.getDefaultToolkit().getImage("images/coeur.gif");
+    
     public Coeur(){
         setSize(20,18);
     }
     
+    /**
+     * Dessine le coeur
+     * @param g 
+     */
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);

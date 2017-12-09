@@ -26,12 +26,9 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -47,6 +44,7 @@ public class Monde extends JPanel {
      * Deux types de projectiles
      */
     private enum typeProjectile {
+
         LASER, BALLE
     }
 
@@ -63,20 +61,20 @@ public class Monde extends JPanel {
     private final ArrayList<Bonus> listeBonusAEnlever = new ArrayList<>();
     private final ArrayList<Projectiles> listeProjectiles = new ArrayList<>();
     private final ArrayList<Projectiles> listeProjectilesAEnlever = new ArrayList();
-    private ArrayList<Ennemis> listeEnnemis = new ArrayList<>();
+    private final ArrayList<Ennemis> listeEnnemis = new ArrayList<>();
     private final ArrayList<Ennemis> listeEnnemisAEnlever = new ArrayList<>();
     private final ControlleurADC controlleur;
     private final ModeleADC modele;
     private int sleepingTime = 15;
-    private int rotationTirActuel = (int) 200 / sleepingTime;
-    private int rotationSpawnActuel = (int) 3000 / sleepingTime;
+    private final int rotationTirActuel = (int) 200 / sleepingTime;
+    private final int rotationSpawnActuel = (int) 3000 / sleepingTime;
     private boolean gameOn = true;
 
     private int rotation_tir = rotationTirActuel;
     private int rotation_spawn = rotationSpawnActuel;
     private int niveau = 1;
 
-    private Random random = new Random();
+    private final Random random = new Random();
 
     private void tir() {
         switch (typeProjectile) {
@@ -150,19 +148,20 @@ public class Monde extends JPanel {
                     listeEnnemis.add(ennemi);
                     ennemi.setLocation(position);
                     Monde.this.add(ennemi, 0);
+
                 } else {
                     switch (cote) {
                         case 0: //gauche
-                            position = new Point(position.x - 2*ennemi.getWidth(), position.y);
+                            position = new Point(position.x - 2 * ennemi.getWidth(), position.y);
                             break;
                         case 1: //droite
-                            position = new Point(position.x + 2*ennemi.getWidth(), position.y);
+                            position = new Point(position.x + 2 * ennemi.getWidth(), position.y);
                             break;
                         case 2: //haut
-                            position = new Point(position.x, position.y - 2*ennemi.getHeight());
+                            position = new Point(position.x, position.y - 2 * ennemi.getHeight());
                             break;
                         case 3: //bas
-                            position = new Point(position.x, position.y + 2*ennemi.getHeight());
+                            position = new Point(position.x, position.y + 2 * ennemi.getHeight());
 
                     }
                 }
@@ -181,7 +180,7 @@ public class Monde extends JPanel {
             while (true) {
                 while (gameOn) {
                     majJeu();
-                    invalidate();
+                    revalidate();
                     repaint();
                     try {
                         Thread.sleep(sleepingTime);
@@ -201,6 +200,7 @@ public class Monde extends JPanel {
      * délais initial de tir à 0
      *
      * @param controlleur Controlleur du jeu
+     * @param modele Modele du jeu
      */
     public Monde(ControlleurADC controlleur, ModeleADC modele) {
         this.controlleur = controlleur;
@@ -297,7 +297,6 @@ public class Monde extends JPanel {
 
         bougerHero();
         if (rotation_spawn == 0) {
-            System.out.println(niveau);
             spawn();
             niveau++;
             rotation_spawn = rotationSpawnActuel;
@@ -530,6 +529,7 @@ public class Monde extends JPanel {
      * Demande au joueur si il veux recommencer
      */
     public void gameEnd() {
+
         String[] choices = {"Recommencer", "Quitter le jeu"};
         String input = (String) JOptionPane.showInputDialog(this, "Votre partie est terminé. Veuillez choisir ce que vous voulez faire. \n Si vous appuyer sur le X ou sur cancel cela sera considéré comme étant vouloir partir", "Fin de Partie", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
         if (input == null || input.equals(choices[1])) {
@@ -621,6 +621,11 @@ public class Monde extends JPanel {
 
     }
 
+    /**
+     * Fait tomber le bonus de l'ennemi si il en possède un
+     *
+     * @param ennemi
+     */
     private void dropBonus(Ennemis ennemi) {
 
         if (ennemi.getBonus() != null) {
@@ -642,7 +647,7 @@ public class Monde extends JPanel {
         for (Bonus bonus : listeBonus) {
             if (bonus.getBounds().intersects(heros.getBounds())) {
 
-                controlleur.augmenterPoints(bonus.getPoints());
+                controlleur.augmenterPoints(Bonus.POINTS);
                 this.listeBonusAEnlever.add(bonus);
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override

@@ -13,7 +13,7 @@ import java.util.Random;
  */
 public abstract class Ennemis extends Personnages {
 
-    public static int HAUTEUR = 43, LARGEUR = 34;
+    public static final int HAUTEUR = 43, LARGEUR = 34;
     protected int points;
     protected Bonus bonus;
     protected int pointsDeVie;

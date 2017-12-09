@@ -17,10 +17,10 @@ import javax.swing.JComponent;
  */
 public class Bonus extends JComponent {
 
-    private int points = 5;
+    public static final int POINTS = 5;
     private Random random;
     public static int HAUTEUR = 32, LARGEUR = 32;
-    private Image[] images = {
+    private final Image[] images = {
         Toolkit.getDefaultToolkit().getImage("images/boni4.gif"),
         Toolkit.getDefaultToolkit().getImage("images/boni5.gif"),
         Toolkit.getDefaultToolkit().getImage("images/boni6.gif")};
@@ -47,7 +47,7 @@ public class Bonus extends JComponent {
     private Type type;
 
     /**
-     *
+     * Constructeur par défaut
      */
     public Bonus() {
         setSize(HAUTEUR, LARGEUR);
@@ -55,6 +55,10 @@ public class Bonus extends JComponent {
 
     }
 
+    /**
+     * Initialise le type du bonus.
+     * 3 chances égales
+     */
     private void initType() {
         random = new Random();
 
@@ -71,18 +75,15 @@ public class Bonus extends JComponent {
 
     }
 
-    public int getPoints() {
-        return points;
-    }
-
-    /**
-     *
-     * @return
-     */
+   
     public Type getType() {
         return type;
     }
 
+    /**
+     * Dessine le bonus
+     * @param g 
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

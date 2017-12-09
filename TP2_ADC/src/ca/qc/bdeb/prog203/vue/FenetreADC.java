@@ -37,7 +37,7 @@ public class FenetreADC extends JFrame implements Observer {
     private final ControlleurADC controlleur;
     private final ModeleADC modele;
     private JLabel lblPoints;
-    private ArrayList<Coeur> listeCoeur = new ArrayList<>();
+    private final ArrayList<Coeur> listeCoeur = new ArrayList<>();
 
     /**
      * Initialise toutes les composantes de la fenetre et donne le focus au
